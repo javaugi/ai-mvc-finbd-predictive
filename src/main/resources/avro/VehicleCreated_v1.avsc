@@ -1,0 +1,12 @@
+{
+  "type": "record",
+  "name": "VehicleCreated",
+  "namespace": "com.example.inventory.events",
+  "fields": [
+    {"name": "vin", "type": "string"},
+    {"name": "make", "type": "string"},
+    {"name": "model", "type": "string"},
+    {"name": "year", "type": "int"},
+    {"name": "timestamp", "type": "long"}
+  ]
+}

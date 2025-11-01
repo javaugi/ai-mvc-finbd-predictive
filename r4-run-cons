@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Running the Kafka Consumer "
+java -jar target/backend-jar-with-dependencies.jar com.jvidia.aimlbda.kafka.VehicleConsumer
+

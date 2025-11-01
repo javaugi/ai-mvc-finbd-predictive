@@ -1,0 +1,23 @@
+{
+  "type": "record",
+  "name": "VehicleCreated",
+  "namespace": "com.example.inventory.events",
+  "fields": [
+    {"name": "vin", "type": "string"},
+    {"name": "make", "type": "string"},
+    {"name": "model", "type": "string"},
+    {"name": "year", "type": "int"},
+    {"name": "color", "type": ["null", "string"], "default": null}, // Added optional field with default
+    {"name": "timestamp", "type": "long"}
+  ]
+}
+
+/*
+Important for Avro Schema Evolution:
+    Adding fields: Add new fields as ["null", "newType"] with a default value. This makes them optional for older data, ensuring 
+        backward compatibility.
+    Removing fields: Not directly backward compatible without careful planning. If you must remove, ensure old consumers are updated 
+        first, or use a translation layer.
+    Renaming fields: Use Avro aliases to maintain compatibility.
+    Changing types: Generally a breaking change. Avoid if possible, or create a new event type/topic.
+*/

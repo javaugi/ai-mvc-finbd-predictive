@@ -1,0 +1,3 @@
+#!/bin/sh
+echo "Running the Kafka Producer"
+java -jar target/backend-jar-with-dependencies.jar 

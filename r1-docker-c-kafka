@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Starting Kafka and Schema Registry."
+docker compose -f docker-compose.yml up -d
+

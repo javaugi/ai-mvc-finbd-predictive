@@ -1,0 +1,8 @@
+#!/bin/sh
+echo "Running mvn clean package"
+mvn --version
+mvn clean package
+reset
+echo "Running mvn spring-boot:run"
+mvn spring-boot:run
+

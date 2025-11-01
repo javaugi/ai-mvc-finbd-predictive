@@ -1,0 +1,45 @@
+services:
+  cassandra:
+    image: 'cassandra:latest'
+    environment:
+      - 'CASSANDRA_DC=dc1'
+      - 'CASSANDRA_ENDPOINT_SNITCH=GossipingPropertyFileSnitch'
+    ports:
+      - '9042'
+  elasticsearch:
+    image: 'docker.elastic.co/elasticsearch/elasticsearch:7.17.10'
+    environment:
+      - 'ELASTIC_PASSWORD=secret'
+      - 'discovery.type=single-node'
+      - 'xpack.security.enabled=false'
+    ports:
+      - '9200'
+      - '9300'
+  mongodb:
+    image: 'mongo:latest'
+    environment:
+      - 'MONGO_INITDB_DATABASE=mydatabase'
+      - 'MONGO_INITDB_ROOT_PASSWORD=secret'
+      - 'MONGO_INITDB_ROOT_USERNAME=root'
+    ports:
+      - '27017'
+  ollama:
+    image: 'ollama/ollama:latest'
+    ports:
+      - '11434'
+  postgres:
+    image: 'postgres:latest'
+    environment:
+      - 'POSTGRES_DB=mydatabase'
+      - 'POSTGRES_PASSWORD=secret'
+      - 'POSTGRES_USER=myuser'
+    ports:
+      - '5432'
+  redis:
+    image: 'redis:latest'
+    ports:
+      - '6379'
+  zipkin:
+    image: 'openzipkin/zipkin:latest'
+    ports:
+      - '9411'
