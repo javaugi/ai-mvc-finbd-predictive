@@ -12,9 +12,32 @@
         </encoder>
     </appender>
 
-    <logger name="com.sisllc.instaiml" level="DEBUG" additivity="false">
+    <logger name="com.jvidia.aimlbda" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
+    <!--
+    <logger name="com.jvidia.aimlbda.security" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.filter" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.handler" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.oauth2" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.oauth2.user" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.utils" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    -->
     
     <root level="INFO">
         <appender-ref ref="CONSOLE" />

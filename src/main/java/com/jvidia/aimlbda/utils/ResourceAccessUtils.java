@@ -9,6 +9,7 @@ package com.jvidia.aimlbda.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Paths;
@@ -73,6 +74,19 @@ public class ResourceAccessUtils {
 		}
 
 		return file;
-	}
+    }
+
+    public static String getResourceContent(String filename) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            InputStream inputStream = ResourceAccessUtils.class.getResourceAsStream(filename);
+            sb.append(new String(inputStream.readAllBytes()));
+        } catch (IOException ex) {
+            log.error("Error getResourceFile filename {}", filename, ex);
+        }
+
+        return sb.toString();
+    }
 
 }

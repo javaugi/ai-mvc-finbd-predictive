@@ -1,0 +1,60 @@
+server:
+  port: 8088
+  servlet:
+    session:
+      cookie:
+        same-site: none
+        secure: false
+spring:
+  web:
+    base-url: http://localhost:8088
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - profile
+              - email
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+#            redirect-uri: http://localhost:8088/login/oauth2/code/google
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
+            scope:
+              - user:email
+              - read:user
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: sub
+          github:
+            authorization-uri: https://github.com/login/oauth/authorize
+            token-uri: https://github.com/login/oauth/access_token
+            user-info-uri: https://api.github.com/user
+#            user-info-uri: https://api.github.com/user/emails            
+            user-name-attribute: login
+      success-redirect-url: http://localhost:5173/home
+#
+#🧩 What Each Placeholder Means
+#Placeholder        Meaning                                                                          Example
+#{baseUrl}          The public base URL of your Spring Boot backend —                               http://localhost:8088
+#                        the host and port where the backend is running.                               
+#{registrationId}	The ID of your OAuth provider registration, i.e.,                               google
+#                        the name under spring.security.oauth2.client.registration in your config.     
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      endpoint:
+        health:
+          show-details: ALWAYS
+        info:
+          enabled: true
+---

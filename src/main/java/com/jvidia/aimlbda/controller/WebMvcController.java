@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -29,15 +30,22 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class WebMvcController {
     private final AuditLogRepository auditLogRepository;
 
+    @RequestMapping("/{page:^(?!.*[.].*$).*$}")
+    public String forwardTo(@PathVariable("page") String page) {
+        String htmlPage = "/" + page + ".html";
+        log.debug("forwarding request to {}", htmlPage);
+        return htmlPage;
+    }
+
     // to display all auditLogs at localhost:8080
     // to see database values at localhost:8080/h2-console    
-   @GetMapping
+    @GetMapping
     public ResponseEntity<Collection<AuditLog>> getAllAuditlogs(HttpServletRequest request) {
         List<AuditLog> auditLogs = auditLogRepository.findAll();
         String category = request.getParameter("category");

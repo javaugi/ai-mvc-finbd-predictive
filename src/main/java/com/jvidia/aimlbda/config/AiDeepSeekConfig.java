@@ -36,7 +36,7 @@ public class AiDeepSeekConfig implements CommandLineRunner{
     
     @Override
     public void run(String... args) throws Exception {
-        log.info("AiDeepSeekConfig with baseUrl {} args {} ", baseUrl, Arrays.toString(args)); 
+        log.debug("AiDeepSeekConfig with baseUrl {} args {} ", baseUrl, Arrays.toString(args));
         hide(systemResource, apiKey, apiModel);
     }
 

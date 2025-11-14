@@ -7,50 +7,51 @@ package com.jvidia.aimlbda.config;
 import com.jvidia.aimlbda.service.aiml.OllamaService;
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
-import org.springframework.beans.factory.annotation.Value;
+import jakarta.annotation.PostConstruct;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.Duration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.reactive.function.client.WebClient;
 
+@lombok.extern.slf4j.Slf4j
 @Configuration
 public class OllamaConfig {
     public static final String MY_OLLAMA_MODEL = "MY_OLLAMA_MODEL";
     public static final String OLLAMA_CHAT_MODEL = "OLLAMA_CHAT_MODEL";
 
-    @Value("${ollama.baseUrl}")
-    private String ollamaBaseUrl;
-    
-    @Value("${ollama.modelName}")
-    private String modelName;
-    
-    @Value("${ollama.timeout:60}")
-    private int timeoutSeconds;
+    @Autowired
+    protected OllamaProperties ollamaProps;
+
+    @PostConstruct
+    public void init() {
+        log.debug("OllamaConfig {}", ollamaProps);
+    }
 
     @Primary
     @Bean
-    public WebClient ollamaWebClient(OllamaProperties properties) {
+    public WebClient ollamaWebClient() {
         return WebClient.builder()
-                .baseUrl(properties.getBaseUrl())
+                .baseUrl(ollamaProps.getBaseUrl())
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .build();
     }
 
     @Bean
-    public OllamaService ollamaService(OllamaProperties properties, WebClient ollamaWebClient) {
-        return new OllamaService(properties, ollamaWebClient);
+    public OllamaService ollamaService() {
+        return new OllamaService(ollamaProps, ollamaWebClient());
     }
 
     @Bean(name = MY_OLLAMA_MODEL)
     public OllamaChatModel myOllamaChatModel() {
         return OllamaChatModel.builder()
-                .baseUrl(ollamaBaseUrl)
-                .modelName(modelName)
-                .timeout(Duration.ofSeconds(timeoutSeconds))
+                .baseUrl(ollamaProps.getBaseUrl())
+                .modelName(ollamaProps.getModel())
+                .timeout(Duration.ofSeconds(ollamaProps.getConnTimeoutMillis()))
                 .logRequests(true)
                 .logResponses(true)
                 .build();
@@ -59,10 +60,10 @@ public class OllamaConfig {
     @Bean(name = OLLAMA_CHAT_MODEL)
     public ChatModel chatModel() {
         return dev.langchain4j.model.ollama.OllamaChatModel.builder()
-                .baseUrl(ollamaBaseUrl)
-                .modelName(modelName)
+                .baseUrl(ollamaProps.getBaseUrl())
+                .modelName(ollamaProps.getModel())
                 //.httpClientBuilder(SpringRestClientBuilderFactory.INSTANCE)
-                .timeout(Duration.ofSeconds(timeoutSeconds))
+                .timeout(Duration.ofSeconds(ollamaProps.getConnTimeoutMillis()))
                 .logRequests(true)
                 .logResponses(true)
                 .temperature(0.7)

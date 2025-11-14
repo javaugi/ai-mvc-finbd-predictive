@@ -6,7 +6,6 @@ package com.jvidia.aimlbda.repository;
 
 import com.jvidia.aimlbda.entity.AuditLog;
 import java.time.Instant;
-import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

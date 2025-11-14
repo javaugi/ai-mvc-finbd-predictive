@@ -27,17 +27,5 @@ public class JacksonConfig {
         
         return objectMapper;
     }
-    
-    //@Bean
-    /*
-    public ObjectMapper objectMapper(Jackson2ObjectMapperBuilder builder) {
-        ObjectMapper objectMapper = builder.build();
 
-        // Customize ObjectMapper here if needed
-        // Example: Disable writing dates as timestamps
-        // objectMapper.configure(com.fasterxml.jackson.databind.SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
-
-        return objectMapper;
-    }    
-    // */
 }

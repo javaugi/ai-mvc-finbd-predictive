@@ -33,7 +33,8 @@ import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 @Service
-//@RequiredArgsConstructor
+//@RequiredArgsConstructor(onConstructor = @__(
+//        @Autowired))
 public class DataAnalysisService {
 
     private final AuditLogRepository auditLogRepository;

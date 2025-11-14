@@ -19,6 +19,5 @@ public class AopApplicationConfig {
         executor.setMaxRetries(3);
         executor.setOrder(100);
         return executor;
-
     }
 }

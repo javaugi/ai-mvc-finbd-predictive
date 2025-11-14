@@ -6,8 +6,7 @@ package com.jvidia.aimlbda.clients;
 
 import com.jvidia.aimlbda.entity.AuditLog;
 import com.jvidia.aimlbda.repository.AuditLogRepository;
-import jakarta.annotation.PostConstruct;
-import java.time.Instant;
+import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,30 +22,24 @@ public class AuditLogClient {
     
     @Autowired
     AuditLogRepository auditLogRepository;
-    
-    @PostConstruct
-    public void init() {
-        log.info("AuditLogClient init");
-        try{
-            setup();
-        }catch(Exception ex) {
-            log.error("Error AuditLogClient init ", ex);
-        }
-    }    
 
     public void setup() {
-        try{
+        try {
+            if (auditLogRepository.count() > 50) {
+                return;
+            }
+
             List<String> categories = Arrays.asList("Sales", "Expenses", "Inventory", "Marketing", "HR");
             List<String> regions = Arrays.asList("North", "South", "East", "West", "Central");
             Random random = new Random();
             
             List<AuditLog> auditLogs = new ArrayList<>();
             AuditLog entity;
-            for (int i = 0; i < 200; i++) {
+            for (int i = 0; i < 50; i++) {
                 entity = new AuditLog();
                 entity.setCategory(categories.get(random.nextInt(categories.size())));
                 entity.setAuditValue(1000 + random.nextDouble() * 9000);
-                entity.setAuditDate(Instant.now().minus(random.nextInt(365), ChronoUnit.DAYS));
+                entity.setAuditDate(OffsetDateTime.now().minus(random.nextInt(365), ChronoUnit.DAYS));
                 entity.setRegion(regions.get(random.nextInt(regions.size())));
                 entity.setDescription("Sample data entry #" + (i + 1));
                 

@@ -12,7 +12,6 @@ import java.util.Optional;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -21,10 +20,9 @@ import org.springframework.transaction.annotation.Transactional;
  * $LastChangedBy
  */
 @Repository
-@Transactional
 public interface UsersRepository extends CrudRepository<Users, Long> {
 
     Optional<Users> findByUsername(@Param("username") String username);
     
-    boolean existsByUserEmail(@Param("userEmail") String userEmail);
+    Optional<Users> findByEmail(@Param("email") String email);
 }

@@ -13,21 +13,7 @@
     <artifactId>ai-mvc-finbd-predicta</artifactId>
 	<version>1.0.0</version>
     <name>ai-mvc-finbd-predicta</name>
-    <description>AI Fintech Predictive Analysis</description>
-    
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
+    <description>AI Fintech Predictive Analysis</description>    
 	
     <properties>
         <java.version>21</java.version>
@@ -37,16 +23,18 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>    
 
-        <frontend-maven-plugin.version>1.6</frontend-maven-plugin.version>
-        <node.version>v24.6.0</node.version>
-        <npm.version>11.5.2</npm.version>
+        <frontend-maven-plugin.version>1.15.4</frontend-maven-plugin.version>
+        <node.version>v24.11.0</node.version>
+        <npm.version>11.6.2</npm.version>
 
         <org.springframework.boot.version>3.5.6</org.springframework.boot.version>
-        <org.springdoc.version>2.8.9</org.springdoc.version>
+        <spring-security-bom.version>6.5.6</spring-security-bom.version>
+        <org.springdoc.version>2.8.13</org.springdoc.version>
         <spring-ai-bom.version>1.0.2</spring-ai-bom.version>
         <spring-ai-openai.version>1.0.0-M6</spring-ai-openai.version>
         <reactor-bom.version>2025.0.0-M7</reactor-bom.version>
         <reactor.version>3.8.0-M7</reactor.version>
+        <io.netty.version>4.2.7.Final</io.netty.version>
 
         <spring-ai.version>1.0.0</spring-ai.version>
 		<spring-cloud.version>2025.0.0</spring-cloud.version>
@@ -57,20 +45,16 @@
         <github.ollama.version>1.1.3</github.ollama.version> 
         <ollama-client.version>0.2.3</ollama-client.version>
         
-        <io.jsonwebtoken.version>0.12.6</io.jsonwebtoken.version>
+        <everit-json-schema.version>1.14.6</everit-json-schema.version>
+        <io.jsonwebtoken.version>0.13.0</io.jsonwebtoken.version>
         <jackson.version>2.19.2</jackson.version>     
         <kafka.version>4.0.0</kafka.version> <!-- Use a compatible Kafka version -->
         <avro.version>1.12.0</avro.version>
         <confluent.version>7.9.1</confluent.version> <!-- Use a compatible Confluent Platform version -->        
-        <org.projectlombok.version>1.18.42</org.projectlombok.version>
+        <projectlombok.version>1.18.42</projectlombok.version>
+        <lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 	
-        <!--
-        <hibernate-search-parent.version>5.11.12.Final</hibernate-search-parent.version>
-        <hibernate-validator-parent.version>5.4.3.Final</hibernate-validator-parent.version>
-        <hibernate-tools-parent.version>5.6.1.Final</hibernate-tools-parent.version>
-        <org.hibernate.version>7.1.5.Final</org.hibernate.version>
-        <hibernate-core-jakarta.version>5.6.15.Final</hibernate-core-jakarta.version>
-        -->
+        <org.hibernate.orm.version>7.1.5.Final</org.hibernate.orm.version>
     
         <github.victools.version>4.38.0</github.victools.version>
         <pact.version>4.6.17</pact.version>
@@ -79,6 +63,13 @@
         <opentelemetry.instru.pom.version>2.21.0</opentelemetry.instru.pom.version>
         <opentelemetry.prom.version>0.9.1</opentelemetry.prom.version>
         <opentelemetry.semconv.version>1.37.0</opentelemetry.semconv.version>
+   
+        <spring-dotenv.version>4.0.0</spring-dotenv.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <modelmapper.version>3.2.5</modelmapper.version>
+        <javafaker.version>1.0.2</javafaker.version>
+        <io.swagger.version>2.2.40</io.swagger.version>
+        
     </properties> 
     
     <dependencies>
@@ -98,6 +89,27 @@
             <artifactId>reactor-tools</artifactId>
             <version>${reactor.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-reactive-httpclient</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>io.projectreactor.netty</groupId>
+            <artifactId>reactor-netty</artifactId>
+            <version>1.3.0</version>
+        </dependency>
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+        </dependency>        
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-handler</artifactId>
+        </dependency>        
         
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
@@ -125,35 +137,22 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-        </dependency>
-                
+        </dependency>                
         <dependency>
             <groupId>org.springframework.retry</groupId>
             <artifactId>spring-retry</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+        </dependency>                        
+        <!-- Spring ORM -->
         <dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-websocket</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
-		</dependency>
-                
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+        
+        
         <!-- Spring Boot Starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -180,20 +179,84 @@
         </dependency>
                 
         <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+		</dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
+        
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security-bom.version}</version>
         </dependency>
-                        
-        <!-- Spring ORM -->
         <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-orm</artifactId>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security-bom.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security-bom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-core</artifactId>
+            <version>${spring-security-bom.version}</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-jose</artifactId>
+            <version>${spring-security-bom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-resource-server</artifactId>
+            <version>${spring-security-bom.version}</version>
+        </dependency>
+                      
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>${spring-security-bom.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.vaadin.external.google</groupId>
+                    <artifactId>android-json</artifactId>
+                </exclusion>
+            </exclusions>            
+        </dependency>                          
 
         <!-- Hibernate ORM -->
         <!-- Hibernate-C3P0 Integration -->
@@ -215,11 +278,13 @@
         -->
                         
         <!-- Database -->
+        <!--
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
+        -->
         <!-- Or your preferred database driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -474,8 +539,7 @@
         </dependency>        
         <dependency>
             <groupId>org.json</groupId>
-            <artifactId>org.json</artifactId>
-            <version>chargebee-1.0</version>
+            <artifactId>json</artifactId>
         </dependency>
         <dependency>
             <groupId>jakarta.persistence</groupId>
@@ -606,17 +670,17 @@
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core</artifactId>
-            <version>2.2.31</version>
+            <version>${io.swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-core-jakarta</artifactId>
-            <version>2.2.31</version>
+            <version>${io.swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-annotations</artifactId>
-            <version>2.2.31</version> 
+            <version>${io.swagger.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>io.swagger</groupId>
@@ -624,28 +688,63 @@
                 </exclusion>
             </exclusions>            
         </dependency>                            
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+            <version>${io.swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2</artifactId>
+            <version>${io.swagger.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-jaxrs2-jakarta</artifactId>
+            <version>${io.swagger.version}</version>
+        </dependency>
 
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>      
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>  
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-core</artifactId>
+        </dependency>  
+        
+        <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+        </dependency>    
+        <dependency>
+            <groupId>com.github.erosb</groupId>
+            <artifactId>everit-json-schema</artifactId>
+            <version>${everit-json-schema.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.12.6</version>
+            <version>${io.jsonwebtoken.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
-            <version>0.12.6</version>
+            <version>${io.jsonwebtoken.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
+            <version>${io.jsonwebtoken.version}</version>
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.6</version>
-            <scope>runtime</scope>
+            <version>${io.jsonwebtoken.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springdoc</groupId>
@@ -654,6 +753,12 @@
         </dependency>
                                                                                                                                                                                                                                                                                           
         <!-- A JCache implementation (like Ehcache) -->
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-hikaricp</artifactId>
+        </dependency>       
+        <!--
+        -->
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>
@@ -684,13 +789,13 @@
             <artifactId>junit5</artifactId>
             <version>${pact.version}</version>
             <scope>test</scope>
-        </dependency>        
+        </dependency>                
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        
+            <groupId>com.github.javafaker</groupId>
+            <artifactId>javafaker</artifactId>
+            <version>${javafaker.version}</version>
+        </dependency>  
+                
         <dependency>
             <groupId>org.springframework.ai</groupId>
             <artifactId>spring-ai-test</artifactId>
@@ -754,15 +859,41 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-mapstruct-binding</artifactId>
+            <version>${lombok-mapstruct-binding.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>${spring-dotenv.version}</version>
+        </dependency>        
+        <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-            <version>1.6.3</version>
-        </dependency>        
+            <version>${mapstruct.version}</version>
+        </dependency>      
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>          
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>3.2.4</version>
+            <version>${modelmapper.version}</version>
         </dependency>        
+        <dependency>
+            <groupId>org.modelmapper.extensions</groupId>
+            <artifactId>modelmapper-spring</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.modelmapper.extensions</groupId>
+            <artifactId>modelmapper-jackson</artifactId>
+            <version>${modelmapper.version}</version>
+        </dependency>
         
         <!-- Jackson for JSON output -->
         <!-- OpenNLP for NLP (Name, Skills Extraction) -->
@@ -796,48 +927,17 @@
                     <artifactId>log4j</artifactId>
                 </exclusion>
             </exclusions>    
-        </dependency>              
-        <!--
+        </dependency>    
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-        </dependency>
+        </dependency>                  
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-reload4j</artifactId>
-        </dependency>        
-        
-        <dependency>
-            <groupId>jakarta.servlet.jsp.jstl</groupId>
-            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.web</groupId>
-            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>taglibs</groupId>
-            <artifactId>standard</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId> 
-            <version>4.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.servlet.jsp</groupId>
-            <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.3.3</version>
-            <scope>provided</scope>
-        </dependency>
-        -->
-                
+                    
+        <!--
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>tensorflow-core-platform</artifactId>
@@ -848,6 +948,7 @@
             <artifactId>tensorflow-core-platform-gpu</artifactId>
             <version>0.5.0</version>
         </dependency>
+        -->
         <dependency>
             <groupId>com.theokanning.openai-gpt3-java</groupId>
             <artifactId>service</artifactId>
@@ -881,52 +982,25 @@
 				<scope>import</scope>
             </dependency>
             
-            <!--
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-search-parent</artifactId>
-                <version>${hibernate-search-parent.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator-parent</artifactId>
-                <version>${hibernate-validator-parent.version}</version>
-                <type>pom</type>
-            </dependency> 
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${org.hibernate.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-ehcache</artifactId>
-                <version>6.0.0.Alpha7</version>
-                <type>pom</type>
-            </dependency>
-            -->
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-tools-parent</artifactId>
-                <version>${hibernate-tools-parent.version}</version>
-                <type>pom</type>
-            </dependency>             
-
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-parent</artifactId>
                 <version>90</version>
                 <type>pom</type>
             </dependency>        
-                               
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>20250517</version>
+            </dependency>                               
+            <!--
             <dependency>
                 <groupId>org.tensorflow</groupId>
                 <artifactId>tensorflow-java</artifactId>
                 <version>1.1.0</version>
                 <type>pom</type>
             </dependency>
+            -->
                                     
             <dependency>
                 <groupId>org.testcontainers</groupId>
@@ -975,51 +1049,41 @@
                 <artifactId>reactor-bom</artifactId>
                 <version>${reactor-bom.version}</version>
                 <type>pom</type>
-            </dependency>                        
+            </dependency>     
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-bom</artifactId>
+                <version>${io.jsonwebtoken.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelmapper.extensions</groupId>
+                <artifactId>modelmapper-extensions</artifactId>
+                <version>${modelmapper.version}</version>
+                <type>pom</type>
+            </dependency>        
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security-bom.version}</version>
+                <type>pom</type>
+            </dependency>           
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${io.netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+                                   
 		</dependencies>
 	</dependencyManagement>
 
 	<build>
         <defaultGoal>spring-boot:run</defaultGoal>
-        <finalName>predicta</finalName>
+        <finalName>predicta</finalName>        
         <plugins>
-            <!-- PACT Maven Plugin -->
-            <plugin>
-                <groupId>au.com.dius.pact.provider</groupId>
-                <artifactId>maven</artifactId>
-                <version>4.6.8</version>
-                <configuration>
-                    <!--
-                    <pactBrokerUrl>${pact.broker.url}</pactBrokerUrl>
-                    <pactBrokerUsername>${pact.broker.username}</pact.broker.username>
-                    <pactBrokerPassword>${pact.broker.password}</pact.broker.password>
-                    <projectVersion>${project.version}</projectVersion>
-                    -->
-                    <trimSnapshot>true</trimSnapshot>
-                </configuration>
-            </plugin>    
-                    
-            <plugin>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.11.2</version> <!-- Use the latest version -->
-                <!--
-                <executions>
-                  <execution>
-                    <id>attach-javadocs</id>
-                    <goals>
-                      <goal>jar</goal>
-                    </goals>
-                  </execution>
-                </executions>
-                -->
-            </plugin>         
-
             <!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.8.1</version>
-            </plugin>     
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>                
@@ -1034,7 +1098,7 @@
                             <outputDirectory>${basedir}/target/classes/static</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${basedir}/../frontend/out</directory>
+                                    <directory>${basedir}/../frontend/build</directory>
                                     <filtering>false</filtering>
                                 </resource>
                             </resources>
@@ -1042,6 +1106,9 @@
                     </execution>
                 </executions>
             </plugin>   
+            -->
+            
+            <!--
             <plugin>
                 <groupId>com.github.eirslett</groupId>
                 <artifactId>frontend-maven-plugin</artifactId>
@@ -1080,36 +1147,69 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>              
+            </plugin>         
+            -->     
+
+            <!-- PACT Maven Plugin -->
+            <plugin>
+                <groupId>au.com.dius.pact.provider</groupId>
+                <artifactId>maven</artifactId>
+                <version>4.6.8</version>
+                <configuration>
+                    <!--
+                    <pactBrokerUrl>${pact.broker.url}</pactBrokerUrl>
+                    <pactBrokerUsername>${pact.broker.username}</pact.broker.username>
+                    <pactBrokerPassword>${pact.broker.password}</pact.broker.password>
+                    <projectVersion>${project.version}</projectVersion>
+                    -->
+                    <trimSnapshot>true</trimSnapshot>
+                </configuration>
+            </plugin>    
+                    
+            <plugin>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.11.2</version> 
+                <!--
+                <executions>
+                  <execution>
+                    <id>attach-javadocs</id>
+                    <goals>
+                      <goal>jar</goal>
+                    </goals>
+                  </execution>
+                </executions>
+                -->
+            </plugin>         
 
             <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</path>
-						<path>
-							<groupId>org.springframework.boot</groupId>
-							<artifactId>spring-boot-configuration-processor</artifactId>
-						</path>
-					</annotationProcessorPaths>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${projectlombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct-binding.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                        </path>
+                    </annotationProcessorPaths>                    
 				</configuration>
-			</plugin> 
-            <plugin>
-                <artifactId>maven-clean-plugin</artifactId>
-                <version>3.4.1</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-install-plugin</artifactId>
-                <version>3.1.4</version>
-            </plugin>
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.4</version>
-            </plugin>            
+            </plugin> 
+                        
+            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -1134,7 +1234,9 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
                           
+            <!--
             <plugin>
                 <groupId>org.apache.avro</groupId>
                 <artifactId>avro-maven-plugin</artifactId>
@@ -1152,9 +1254,11 @@
                     </execution>
                 </executions>
             </plugin> 
+            -->
+            <!--
             <plugin>
                 <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
+                <artifactId></artifactId>
                 <version>2.2.1</version>
                 <executions>
                     <execution>
@@ -1177,6 +1281,9 @@
                     </dependency>
                 </dependencies>
             </plugin>     
+            -->
+            
+            <!--
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
@@ -1189,13 +1296,14 @@
                     </locations>
                 </configuration>
             </plugin>          
-                   
             -->
+                   
                                     
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <jvmArguments>-Xmx512m</jvmArguments>
                     <executable>true</executable>
                     <mainClass>com.jvidia.aimlbda.MyApplication</mainClass> 
                     <wait>500</wait>
