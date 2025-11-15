@@ -5,7 +5,6 @@
 package com.jvidia.aimlbda.config;
 
 import com.jvidia.aimlbda.repository.RoleRepository;
-import com.jvidia.aimlbda.repository.UserInfoRepository;
 import com.jvidia.aimlbda.security.RestAuthenticationEntryPoint;
 import com.jvidia.aimlbda.security.filter.JwtAuthenticationFilter;
 import com.jvidia.aimlbda.security.handler.CustomAccessDeniedHandler;
@@ -142,9 +141,9 @@ public class SecurityConfig {
                 "http://localhost:5173", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-API-KEY", "X-User-Id"));
         configuration.setAllowCredentials(true); // Important for session cookies
-        configuration.setExposedHeaders(Arrays.asList("Authorization"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "X-RateLimit-Remaining", "X-RateLimit-Reset"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
