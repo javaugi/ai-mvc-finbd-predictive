@@ -125,17 +125,26 @@ public class UserInfoClient {
     );
 
     static final List<UserInfo> USERS = List.of(
-            UserInfo.builder().username("david.lee.remax").email("david.lee.remax@gmail.com")
-                    .password("JiaxianHomeRem1@8@9").name("D Lee").firstName("David").lastName("Lee").middleInitial("Z")
-                    .registrationId(AuthProvider.google.toString()).provider(AuthProvider.google).providerId(AuthProvider.google.toString())
+            UserInfo.builder().username("javaugi_g")
+                    .email("david.lee.remax@gmail.com")
+                    .password("admin").name("D Lee").firstName("David")
+                    .lastName("Lee").middleInitial("Z")
+                    .registrationId(AuthProvider.google.toString())
+                    .provider(AuthProvider.google).providerId(AuthProvider.google.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build(),
-            UserInfo.builder().username("javaugi").email("javaugi@hotmail.com")
-                    .password("JiaxianHmeMshm1@8").name("D Lee").firstName("David").lastName("Lee").middleInitial("Z")
-                    .registrationId(AuthProvider.github.toString()).provider(AuthProvider.github).providerId(AuthProvider.github.toString())
+            UserInfo.builder().username("javaugi")
+                    .email("javaugi@hotmail.com")
+                    .password("admin").name("D Lee").firstName("David")
+                    .lastName("Lee").middleInitial("Z")
+                    .registrationId(AuthProvider.github.toString())
+                    .provider(AuthProvider.github).providerId(AuthProvider.github.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build(),
-            UserInfo.builder().username("david.lee.loc").email("javaugi@hotmail.com")
-                    .password("JiaxianHomeRem1@8@9").name("D Lee").firstName("David").lastName("Lee").middleInitial("Z")
-                    .registrationId(AuthProvider.local.toString()).provider(AuthProvider.local).providerId(AuthProvider.local.toString())
+            UserInfo.builder().username("javaugi.loc")
+                    .email("javaugi@hotmail.com")
+                    .password("admin").name("D Lee").firstName("David")
+                    .lastName("Lee").middleInitial("Z")
+                    .registrationId(AuthProvider.local.toString())
+                    .provider(AuthProvider.local).providerId(AuthProvider.local.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build()
     );
 }

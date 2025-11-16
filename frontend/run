@@ -1,0 +1,6 @@
+#!/bin/sh
+reset
+npm -v
+echo "Running npm run dev"
+npm run dev
+

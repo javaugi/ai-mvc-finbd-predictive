@@ -8,6 +8,7 @@ Set up OAuth2 credentials:
         (3) Authorized JavaScript origins: http://localhost:5173
         (4) Authorized redirect URIs: http://localhost:8088/login/oauth2/code/google, http://localhost:5173
         Client ID: 879160345815-8q1q91mv1dbgajpf7qimm0fuvsdl0j7q.apps.googleusercontent.com
+        (5) Create credentials APIkeyRemax101: AIzaSyBS5eh60RFkjglZh-50r-sUIzYjT9J9jmo
 
     Create credentials (OAuth 2.0 Client IDs)
     Add http://localhost:8088/login/oauth2/code/google as authorized redirect URI
@@ -20,6 +21,7 @@ GitHub: Go to GitHub Settings → Developer settings → OAuth Apps
     (2) Homepage URL:  http://localhost:5173/home
     (3) Application description: ai-mvc-finbda-predicta
     (4) Authorization callback URL: http://localhost:8088/login/oauth2/code/github
+    (5) personal access token ntoke042225: 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
 
 Frontend Setup:
     Create a new React app and replace the files with the above

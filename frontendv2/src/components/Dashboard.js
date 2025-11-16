@@ -12,18 +12,21 @@ export default function Dashboard() {
     useEffect(() => {
         const params = new URLSearchParams(window.location.search);
         const token = params.get("token");
-                const username = params.get("username");
-        if (username) {
-            localStorage.setItem("username", username);
-        }
-
+        const username = params.get("username");
+        const apiKey = params.get("X-API-KEY");
+        const clientId = params.get("X-User-Id");
         if (token) {
             localStorage.setItem("token", token);
+            localStorage.setItem("username", username);
+            localStorage.setItem("apiKey", apiKey);
+            localStorage.setItem("userId", clientId);
             window.history.replaceState({}, document.title, "/dashboard");
         }
 
         const jwt = localStorage.getItem("token");
-        const uname = localStorage.getItem("username");
+        const xuname = localStorage.getItem("username");
+        const xkey = localStorage.getItem("apiKey");
+        const xuid = localStorage.getItem("userId");
         if (!jwt) {
             navigate("/login");
             return;
@@ -32,6 +35,9 @@ export default function Dashboard() {
         axios.get("http://localhost:8088/auth/check", {
             headers: {
                 Authorization: `Bearer ${jwt}`,
+                "X-API-KEY": xkey,
+                "X-User-Id": xuid,
+                "X-User-Name": xuname
             },
         }).then((response) => {
                     if (response.data.authenticated) {

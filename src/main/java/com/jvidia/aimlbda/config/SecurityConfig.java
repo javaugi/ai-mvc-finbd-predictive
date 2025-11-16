@@ -140,10 +140,11 @@ public class SecurityConfig {
         configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8088",
                 "http://localhost:5173", "http://localhost:3000"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(Arrays.asList("*"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-API-KEY", "X-User-Id"));
+        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type",
+                "X-Auth-Token", "X-API-KEY", "X-User-Id", "X-User-Name"));
+        configuration.setExposedHeaders(Arrays.asList("Authorization", "X-Auth-Token",
+                "X-RateLimit-Remaining", "X-RateLimit-Reset"));
         configuration.setAllowCredentials(true); // Important for session cookies
-        configuration.setExposedHeaders(Arrays.asList("Authorization", "X-RateLimit-Remaining", "X-RateLimit-Reset"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
