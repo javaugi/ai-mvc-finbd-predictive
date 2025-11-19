@@ -70,6 +70,9 @@
         <javafaker.version>1.0.2</javafaker.version>
         <io.swagger.version>2.2.40</io.swagger.version>
         <com.bucket4j.version>8.14.0</com.bucket4j.version>
+        <com.theokanning.openai.version>0.18.2</com.theokanning.openai.version>
+        <httpclient.version>4.5.14</httpclient.version>
+        <commons-csv.version>1.14.0</commons-csv.version>
     </properties> 
     
     <dependencies>
@@ -477,6 +480,22 @@
         -->
         
         <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>service</artifactId>
+            <version>${com.theokanning.openai.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>api</artifactId>
+            <version>${com.theokanning.openai.version}</version>
+        </dependency>        
+        <dependency>
+            <groupId>com.theokanning.openai-gpt3-java</groupId>
+            <artifactId>client</artifactId>
+            <version>${com.theokanning.openai.version}</version>
+        </dependency>
+        
+        <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
         </dependency>
@@ -496,24 +515,28 @@
         </dependency>
         -->
         
-       <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>5.10</version>
-        </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId> 
-            <version>4.5.14</version>
-        </dependency>
+            <artifactId>httpcore</artifactId>
+        </dependency>        
         <dependency>
             <groupId>org.apache.httpcomponents.core5</groupId>
             <artifactId>httpcore5</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId> 
+            <version>${httpclient.version}</version>            
+        </dependency>
+        <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>${httpclient.version}</version>            
+        </dependency>         
         <dependency>
             <groupId>org.apache.httpcomponents.client5</groupId>
             <artifactId>httpclient5-fluent</artifactId>
@@ -525,18 +548,23 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
-            <version>1.13.1</version>
+            <version>${commons-csv.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-csv</artifactId>
-            <version>1.14.0</version>
+            <version>${commons-csv.version}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.19.0</version>
         </dependency>        
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>5.10</version>
+        </dependency>
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
@@ -949,11 +977,6 @@
             <version>0.5.0</version>
         </dependency>
         -->
-        <dependency>
-            <groupId>com.theokanning.openai-gpt3-java</groupId>
-            <artifactId>service</artifactId>
-            <version>0.18.2</version>
-        </dependency>
                         
         <dependency>
             <groupId>com.bucket4j</groupId>

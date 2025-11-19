@@ -28,8 +28,10 @@ public class LogUtils {
         log.debug("Server Name {}, port {}, path {}, name {}", req.getServerName(), req.getServerPort(), req.getServletPath(), req.getServerName());
         log.debug("method {}, pathInfo {}, requestURI {} \n queryString {}", req.getMethod(), req.getPathInfo(), req.getRequestURI(), req.getQueryString());
 
-        for (Cookie cookie : req.getCookies()) {
-            log.debug("Cookie name {}, value {}, path {} \n queryString {}", cookie.getName(), cookie.getValue(), cookie.getPath());
+        if (req.getCookies() != null) {
+            for (Cookie cookie : req.getCookies()) {
+                log.debug("Cookie name {}, value {}, path {} \n queryString {}", cookie.getName(), cookie.getValue(), cookie.getPath());
+            }
         }
 
         req.getAttributeNames().asIterator()

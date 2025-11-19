@@ -6,11 +6,11 @@ package com.jvidia.aimlbda.dto.aiml;
 
 public record OllamaRequest(String model, String prompt) {
     public OllamaRequest(String model) {
-        this("deepseek-llm", "");
+        this("llama3", "");
     }
 
     public OllamaRequest(String model, String prompt) {
-        this.model = "deepseek-llm";
+        this.model = "llama3";
         this.prompt = "Explain quantum computing";
     }
 }

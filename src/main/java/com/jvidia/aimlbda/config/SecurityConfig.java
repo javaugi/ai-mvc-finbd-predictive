@@ -85,7 +85,6 @@ public class SecurityConfig {
     }
 
     //Security Filter chain: Contains policies for all the security
-    //*
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.debug("securityFilterChain ..... ");
@@ -95,17 +94,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorizeRequests
                        -> authorizeRequests
                        .requestMatchers(PERMIT_ALL_PATHS).permitAll()
-                       //.requestMatchers("/auth/login", "/auth/signup", "/auth/logout").permitAll()
-                       //.requestMatchers("/public/**", "/error", "/actuator/**").permitAll()
-                       //.requestMatchers("/api/testonly", "/api/testonly/**").permitAll()
-                       //.requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                        .anyRequest().authenticated()
                )
                .oauth2Login(oauth2 -> oauth2
-                               .authorizationEndpoint(authEndpoint -> authEndpoint.authorizationRequestRepository(httpCookieOAuth2AutherizationRequestRepository))
-                .redirectionEndpoint(redirect -> redirect.baseUri("/login/oauth2/code/*"))
-                .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())
-                )
+               .authorizationEndpoint(authEndpoint -> authEndpoint
+               .authorizationRequestRepository(httpCookieOAuth2AutherizationRequestRepository))
+               .redirectionEndpoint(redirect -> redirect.baseUri("/login/oauth2/code/*"))
+               .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())
+               )
                .successHandler(new OAuth2LoginSuccessHandler(jwtTokenService, userInfoService, httpCookieOAuth2AutherizationRequestRepository))                )
                 .logout(logout -> logout
                 .logoutUrl("/auth/logout") // Single logout endpoint
@@ -130,7 +126,6 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
-    // */
 
     //CSRF (Cross-Site Request Forgery):
     //CORS (Cross-Origin Resource Sharing):

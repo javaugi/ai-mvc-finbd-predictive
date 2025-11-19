@@ -51,9 +51,9 @@ public class RestTemplateConfig implements CommandLineRunner {
     public static final String OPEN_AI_API_DS = "openAiApiDeepsk";
     public static final String OPEN_AI_CHAT_MODEL_DS = "openAiChatModelDeepsk";
     //Option 1: Run DeepSeek Locally with Ollama (Recommended for Free)
-    public static final String OLLAMA_BASE_API = "http://localhost:11434/v1/";
+    public static final String OLLAMA_BASE_API = "http://localhost:11434/";
     public static final String OLLAMA_DUMMY_API_KEY = "no-key-needed";
-    public static final String OLLAMA_API = OLLAMA_BASE_API + "generate";
+    public static final String OLLAMA_API = OLLAMA_BASE_API + "api/chat";
 
     @Primary
     @Bean(name = REST_TEMPLATE)
