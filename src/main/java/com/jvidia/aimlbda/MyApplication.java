@@ -25,10 +25,11 @@ public class MyApplication {
     public static final String BASE_PACKAGES_TO_SCAN = "com.jvidia.aimlbda";
 
     public static void main(String[] args) {
-        log.debug("MyApplication main Spring Boot {} args {}", SpringBootVersion.getVersion(), Arrays.toString(args));
+        log.info("MyApplication main Spring Boot {} args {}", SpringBootVersion.getVersion(), Arrays.toString(args));
         SpringApplication app = new SpringApplication(MyApplication.class);
         app.addInitializers(new CustomContextInitializer()); // Register your initializer
         app.run(args);
+        log.info("MyApplication running ...");
 	}
     
     @Bean

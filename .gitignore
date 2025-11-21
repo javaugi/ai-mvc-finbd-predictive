@@ -37,3 +37,4 @@ mvnw.bat
 mvnw.cmd
 .env
 /src/main/resources/lottdocs/oauth2/OAuthLogin.md
+/src/main/resources/logback-test.xml
