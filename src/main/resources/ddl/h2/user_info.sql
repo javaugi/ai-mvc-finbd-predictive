@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS user_info (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(65),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    name VARCHAR(65),
+    first_name VARCHAR(65),
+    last_name VARCHAR(65),
+    middle_initial VARCHAR(7),
+    birth_date timestamp(6) WITH TIME ZONE,
+    age INT,
+    street_address VARCHAR(65),
+    city VARCHAR(65),
+    state VARCHAR(15),
+    zip_code VARCHAR(15),
+    image_url VARCHAR(4095),
+    email_verified BOOLEAN DEFAULT FALSE,
+    provider VARCHAR(65),
+    provider_id VARCHAR(65),
+    registration_id VARCHAR(65),
+    created_date timestamp(6) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+    updated_date timestamp(6) WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+

@@ -281,13 +281,11 @@
         -->
                         
         <!-- Database -->
-        <!--
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>runtime</scope>
         </dependency>
-        -->
         <!-- Or your preferred database driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -780,13 +778,11 @@
             <version>${org.springdoc.version}</version>
         </dependency>
                                                                                                                                                                                                                                                                                           
-        <!-- A JCache implementation (like Ehcache) -->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
         </dependency>       
-        <!--
-        -->
+        <!-- A JCache implementation (like Ehcache) -->
         <dependency>
             <groupId>org.ehcache</groupId>
             <artifactId>ehcache</artifactId>

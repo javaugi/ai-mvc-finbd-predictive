@@ -16,10 +16,12 @@
         </encoder>
     </appender>
 
-    <logger name="com.jvidia.aimlbda" level="DEBUG" additivity="false">
+    <logger name="com.jvidia.aimlbda" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <!--
+    <logger name="com.jvidia.aimlbda.config" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
     <logger name="com.jvidia.aimlbda.security" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
@@ -35,13 +37,9 @@
     <logger name="com.jvidia.aimlbda.security.oauth2.user" level="DEBUG" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="com.jvidia.aimlbda.utils" level="DEBUG" additivity="false">
+    <logger name="com.jvidia.aimlbda.utils" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
     </logger>
-    <logger name="com.jvidia.aimlbda.security" level="DEBUG" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-    -->
     
     <root level="INFO">
         <appender-ref ref="CONSOLE" />

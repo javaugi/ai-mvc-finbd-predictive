@@ -1,0 +1,18 @@
+CREATE TABLE IF NOT EXISTS test_users (
+    ID INT PRIMARY KEY AUTO_INCREMENT,
+    username VARCHAR(65),
+    email VARCHAR(255),
+    password VARCHAR(255),
+    name VARCHAR(65),
+    first_name VARCHAR(65),
+    last_name VARCHAR(65),
+    middle_initial VARCHAR(7),
+    birth_date  timestamp(6) with time zone,
+    age INT,
+    street_address VARCHAR(65),
+    city VARCHAR(65),
+    state VARCHAR(15),
+    zip_code VARCHAR(15),
+    created_date timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP,
+    updated_date timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP
+);

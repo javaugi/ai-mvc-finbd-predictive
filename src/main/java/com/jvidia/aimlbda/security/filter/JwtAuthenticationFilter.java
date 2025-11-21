@@ -33,6 +33,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             "/auth/logout",
             "/actuator",
             "/error",
+            "/h2-console",
+            "/favicon.ico",
+            "/webjars",
             "/swagger-ui",
             "/v3/api-docs",
             "/api/testonly"
@@ -99,4 +102,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
 }
-

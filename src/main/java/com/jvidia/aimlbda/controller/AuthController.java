@@ -114,14 +114,14 @@ public class AuthController {
 
     @GetMapping("/check")
     public Map<String, Object> authCheck(Authentication authentication) {
-        log.error("authCheck authentication {}", authentication);
+        log.debug("authCheck authentication {}", authentication);
         if (authentication == null || !authentication.isAuthenticated()) {
             return Map.of("authenticated", false);
         }
 
         String name = authentication.getName();
         authentication.getPrincipal();
-        log.error("authCheck name {} principal {} \n details {}", name, authentication.getPrincipal(), authentication.getDetails());
+        log.debug("authCheck name {} principal {} \n details {}", name, authentication.getPrincipal(), authentication.getDetails());
 
         return Map.of(
                 "authenticated", true,

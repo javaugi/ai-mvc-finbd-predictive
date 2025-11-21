@@ -1,0 +1,2 @@
+CREATE SCHEMA IF NOT EXISTS h2_schema;
+SET SCHEMA h2_schema;

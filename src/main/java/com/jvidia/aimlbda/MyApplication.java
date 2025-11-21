@@ -38,7 +38,7 @@ public class MyApplication {
             log.debug("Beans provided by Spring Boot {} count {}", SpringBootVersion.getVersion(), beans.length);
             Arrays.sort(beans);
             for (String bean : beans) {
-                System.out.println(bean);
+                log.debug(bean);
             }
         };
     }    

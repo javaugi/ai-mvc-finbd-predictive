@@ -15,7 +15,6 @@ import com.jvidia.aimlbda.utils.types.RoleType;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
@@ -36,8 +35,10 @@ public class UserInfoClient {
     public void setup() {
         try {
             setupRoles();
-            setupUsers();
+            setupUserInfo();
             setupUserRoles();
+            log.debug("UserInfoClient.setup() Role count {}, UserInfo count {} UserRole count {}",
+                    roleRepository.count(), userInfoRepository.count(), userRoleRepository.count());
         } catch (Exception ex) {
             log.error("Error setup ", ex);
         }
@@ -53,7 +54,7 @@ public class UserInfoClient {
             for (UserInfo userInfo : users) {
                 if (roleUser != null && roleUser.getRole() != null) {
                     Optional<UserRole> optUser = this.userRoleRepository.findByRoleAndUserInfo(roleUser, userInfo);
-                    if (optUser.isEmpty()) {
+                    if (!optUser.isPresent()) {
                         userRole = UserRole.builder()
                                 .role(roleUser)
                                 .userInfo(userInfo)
@@ -63,7 +64,7 @@ public class UserInfoClient {
                 }
                 if (roleAdmin != null && roleAdmin.getRole() != null) {
                     Optional<UserRole> optAdm = this.userRoleRepository.findByRoleAndUserInfo(roleAdmin, userInfo);
-                    if (optAdm.isEmpty()) {
+                    if (!optAdm.isPresent()) {
                         userRole = UserRole.builder()
                                 .role(roleAdmin)
                                 .userInfo(userInfo)
@@ -81,12 +82,12 @@ public class UserInfoClient {
         log.info("Total userRoles {}", userRoleRepository.count());
     }
 
-    private void setupUsers() {
+    private void setupUserInfo() {
         try {
             List<UserInfo> users = new ArrayList<>();
             for (UserInfo entity : USERS) {
                 Optional<UserInfo> opt = userInfoRepository.findByEmail(entity.getEmail());
-                if (opt.isEmpty()) {
+                if (!opt.isPresent()) {
                     users.add(entity);
                 }
             }
@@ -119,11 +120,6 @@ public class UserInfoClient {
         log.info("Total roles {}", roleRepository.count());
     }
 
-    Map<String, String> myUserData = Map.of(
-            "david.lee.remax@gmail.com", "JiaxianHomeRem1@8@9",
-            "javaugi@hotmail.com", "JiaxianHmeMshm1@8"
-    );
-
     static final List<UserInfo> USERS = List.of(
             UserInfo.builder().username("javaugi_g")
                     .email("david.lee.remax@gmail.com")
@@ -140,7 +136,7 @@ public class UserInfoClient {
                     .provider(AuthProvider.github).providerId(AuthProvider.github.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build(),
             UserInfo.builder().username("javaugi.loc")
-                    .email("javaugi@hotmail.com")
+                    .email("javaugi@yahoo.com")
                     .password("admin").name("D Lee").firstName("David")
                     .lastName("Lee").middleInitial("Z")
                     .registrationId(AuthProvider.local.toString())

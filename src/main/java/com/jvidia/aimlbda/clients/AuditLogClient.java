@@ -26,6 +26,7 @@ public class AuditLogClient {
     public void setup() {
         try {
             if (auditLogRepository.count() > 50) {
+                log.info("AuditLogClient.setup() count {}", auditLogRepository.count());
                 return;
             }
 
@@ -47,11 +48,10 @@ public class AuditLogClient {
             }
             
             auditLogRepository.saveAll(auditLogs);
-            log.info("Total Records added {}", auditLogRepository.count());
-        }catch(Exception e) {
+            log.info("AuditLogClient.setup() records added count {}", auditLogRepository.count());
+        } catch (Exception e) {
             log.error("Error setup {}", e);
         }
-        
     }
 
 }

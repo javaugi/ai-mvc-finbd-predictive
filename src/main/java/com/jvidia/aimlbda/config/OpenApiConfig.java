@@ -37,7 +37,8 @@ public class OpenApiConfig {
                         .description("More about My API")
                         .url("https://github.com/myorg/myapi"))
                 .servers(List.of(
-                        new Server().url("http://localhost:5173").description("Frontend Server"),
+                        new Server().url("http://localhost:3000").description("Frontend React Server - Dashboard"),
+                        new Server().url("http://localhost:5173").description("Frontend React Server - Vite"),
                         new Server().url("http://localhost:8088").description("Development Server"),
                         new Server().url("https://api.myapp.com").description("Production Server")
                 ))

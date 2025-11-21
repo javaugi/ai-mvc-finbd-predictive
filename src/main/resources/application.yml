@@ -47,14 +47,3 @@ spring:
 #                        the host and port where the backend is running.                               
 #{registrationId}	The ID of your OAuth provider registration, i.e.,                               google
 #                        the name under spring.security.oauth2.client.registration in your config.     
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-      endpoint:
-        health:
-          show-details: ALWAYS
-        info:
-          enabled: true
----

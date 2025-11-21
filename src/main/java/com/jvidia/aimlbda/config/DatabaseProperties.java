@@ -13,7 +13,15 @@ import org.springframework.stereotype.Component;
 @Component
 public class DatabaseProperties {
    
-    private String driverClassName;
+    private String h2Url;
+    private String h2Username;
+    private String h2Password;
+    private String h2DdlSchemaDir;
+    private String h2Host;
+    private String h2Port;
+    private String h2Database;
+    private String h2DriverClassName;
+    private String h2Name;
 
     private String devUrl;
     private String devUsername;
@@ -22,7 +30,9 @@ public class DatabaseProperties {
     private String devHost;
     private String devPort;
     private String devDatabase;
-    
+    private String devDriverClassName;
+    private String devName;
+
     private String testUrl;
     private String testUsername;
     private String testPassword;
@@ -30,7 +40,9 @@ public class DatabaseProperties {
     private String testHost;
     private String testPort;
     private String testDatabase;
-    
+    private String testDriverClassName;
+    private String testName;
+
     private String prodUrl;
     private String prodUsername;
     private String prodPassword;
@@ -38,6 +50,8 @@ public class DatabaseProperties {
     private String prodHost;
     private String prodPort;
     private String prodDatabase;
+    private String prodDriverClassName;
+    private String prodName;
 
     private ProfileSetting profileSetting;
     private Boolean setupMockTestUserOnly;
@@ -51,6 +65,8 @@ public class DatabaseProperties {
     private String port;
     private String ddlSchemaDir;
     private String database;
+    private String driverClassName;
+    private String name;
 
     private Integer poolInitialSize = 8;
     private Integer poolMaxSize = 20;
@@ -58,14 +74,14 @@ public class DatabaseProperties {
     private Integer connTimeout = 2000;
 
     public static enum ProfileSetting {
-        DEV, TEST, PROD
+        dev, test, prod, h2
     }
     
     public void setupBaseDbProps(ProfileSetting ps) {
         profileSetting = ps;
         
         switch(profileSetting) {
-            case ProfileSetting.PROD -> {
+            case ProfileSetting.prod -> {
                 this.url = this.prodUrl;
                 this.host = this.prodHost;
                 this.port = this.prodPort;
@@ -73,8 +89,10 @@ public class DatabaseProperties {
                 this.password = this.prodPassword;
                 this.database = this.prodDatabase;
                 this.ddlSchemaDir = this.prodDdlSchemaDir;
+                this.driverClassName = this.prodDriverClassName;
+                this.name = this.prodName;
             }
-            case ProfileSetting.DEV -> {
+            case ProfileSetting.dev -> {
                 this.url = this.devUrl;
                 this.host = this.devHost;
                 this.port = this.devPort;
@@ -82,6 +100,19 @@ public class DatabaseProperties {
                 this.password = this.devPassword;
                 this.database = this.devDatabase;
                 this.ddlSchemaDir = this.devDdlSchemaDir;
+                this.driverClassName = this.devDriverClassName;
+                this.name = this.devName;
+            }
+            case ProfileSetting.h2 -> {
+                this.url = this.h2Url;
+                this.host = this.h2Host;
+                this.port = this.h2Port;
+                this.username = this.h2Username;
+                this.password = this.h2Password;
+                this.database = this.h2Database;
+                this.ddlSchemaDir = this.h2DdlSchemaDir;
+                this.driverClassName = this.h2DriverClassName;
+                this.name = this.h2Name;
             }
             default -> {
                 this.url = this.testUrl;
@@ -91,6 +122,8 @@ public class DatabaseProperties {
                 this.password = this.testPassword;
                 this.database = this.testDatabase;
                 this.ddlSchemaDir = this.testDdlSchemaDir;
+                this.driverClassName = this.testDriverClassName;
+                this.name = this.testName;
             }
 
         }
@@ -98,6 +131,9 @@ public class DatabaseProperties {
 
     @Override
     public String toString() {
-        return "DatabaseProperties{" + "driverClassName=" + driverClassName + ", setupMockTestUserOnly=" + setupMockTestUserOnly + ", truncateMockData=" + truncateMockData + ", skipDataInit=" + skipDataInit + ", url=" + url + ", username=" + username + ", ddlSchemaDir=" + ddlSchemaDir + ", database=" + database + ", poolInitialSize=" + poolInitialSize + ", poolMaxSize=" + poolMaxSize + ", poolMinSize=" + poolMinSize + ", connTimeout=" + connTimeout + '}';
+        return "DatabaseProperties{" + "driverClassName=" + driverClassName + ", setupMockTestUserOnly=" + setupMockTestUserOnly
+                + ", truncateMockData=" + truncateMockData + ", skipDataInit=" + skipDataInit + ", url=" + url + ", username=" + username
+                + ", ddlSchemaDir=" + ddlSchemaDir + ", database=" + database + ", poolInitialSize=" + poolInitialSize
+                + ", poolMaxSize=" + poolMaxSize + ", poolMinSize=" + poolMinSize + ", connTimeout=" + connTimeout + '}';
     }
 }

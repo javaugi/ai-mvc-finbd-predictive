@@ -27,6 +27,7 @@ public class TestUserClient extends DataGeneratorBase {
     public void setup() {
         try {
             if (testUserRepository.count() >= 50) {
+                log.info("TestUserClient.setup() count {}", testUserRepository.count());
                 return;
             }
 
@@ -38,6 +39,7 @@ public class TestUserClient extends DataGeneratorBase {
             }
 
             this.testUserRepository.saveAll(testUsers);
+            log.info("TestUserClient.setup() records added count {}", testUserRepository.count());
         } catch (Exception ex) {
             log.error("Error setup ", ex);
 

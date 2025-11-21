@@ -4,6 +4,7 @@
  */
 package com.jvidia.aimlbda.test.aiml;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +14,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @ActiveProfiles("test")
 @SpringBootTest
 @AutoConfigureWebTestClient
+@Disabled("Temporarily disabled for CICD - enable to run test only when Ollama starts up")
 public class OllamaConnectionTest {
 
     @Test

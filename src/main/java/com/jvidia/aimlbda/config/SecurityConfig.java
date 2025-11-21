@@ -52,8 +52,10 @@ public class SecurityConfig {
     @Value("application.base-url")
     private String appHostPort;
 
-    private final String[] PERMIT_ALL_PATHS = List.of("/auth/login", "/auth/signup", "/auth/logout", "/error",
-            "/actuator/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/testonly/**").toArray(new String[0]);
+    private final String[] PERMIT_ALL_PATHS = List.of("/auth/login", "/auth/signup", "/auth/logout",
+            "/error", "/h2-console", "/h2-console/**", "/favicon.ico", "/webjars", "/webjars/**",
+            "/actuator/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/testonly/**")
+            .toArray(new String[0]);
 
     private final JwtTokenService jwtTokenService;
     private final UserInfoService userInfoService;
@@ -88,8 +90,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.debug("securityFilterChain ..... ");
-        //http.securityMatcher(PathRequest.toH2Console());
-       http.csrf(AbstractHttpConfigurer::disable)
+        http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests
                        -> authorizeRequests
@@ -124,6 +125,9 @@ public class SecurityConfig {
                 //.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+
+        // This is necessary to show the H2 console in a frame
+        http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         return http.build();
     }
 

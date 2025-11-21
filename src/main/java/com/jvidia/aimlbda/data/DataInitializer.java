@@ -9,6 +9,7 @@ import com.jvidia.aimlbda.clients.TestUserClient;
 import com.jvidia.aimlbda.clients.UserInfoClient;
 import com.jvidia.aimlbda.config.DatabaseProperties;
 import com.jvidia.aimlbda.utils.ResourceAccessUtils;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringBootVersion;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 @Slf4j
@@ -25,21 +27,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 public class DataInitializer implements ApplicationRunner {
 
     final String TRUNC_TABLE = "TRUNCATE TABLE %s CASCADE";
-    final String USER_ROLES_CONSTRAINTS_1 = "alter table if exists user_roles add constraint FK_role_id_8r4j43ygjdswug4d foreign key (role_id) references roles";
-    final String USER_ROLES_CONSTRAINTS_2 = "alter table if exists user_roles add constraint FK_user_info_id_kndbx0sibxi foreign key (userinfo_id) references user_info";
+    final String USER_ROLES_CONSTRAINTS_1 = "alter table if exists user_roles "
+            + " add constraint FK_role_id_8r4j43ygjdswug4d foreign key (role_id) references roles";
+    final String USER_ROLES_CONSTRAINTS_2 = "alter table if exists user_roles "
+            + " add constraint FK_user_info_id_kndbx0sibxi foreign key (userinfo_id) references user_info ";
 
     final AuditLogClient auditLogClient;
     final UserInfoClient userInfoClient;
     final TestUserClient testUserClient;
     final DatabaseProperties dbProps;
     final JdbcTemplate jdbcTemplate;
-
-    private String database;
+    final Environment env;
 
     @Override
     public void run(ApplicationArguments args) {
-        this.database = dbProps.getDatabase();
-        log.info("DataInitializer Spring Boot {} database {} skipDataInit {}", SpringBootVersion.getVersion(), this.database, dbProps.getSkipDataInit());
+        log.info("DataInitializer Spring Boot {} database {} skipDataInit {} activeProfiles {}",
+                SpringBootVersion.getVersion(), dbProps.getDatabase(), dbProps.getSkipDataInit(), Arrays.toString(env.getActiveProfiles()));
 
         if (!dbProps.getSkipDataInit()) {
             initData();
@@ -92,13 +95,14 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private Boolean checkTableExists(String tableName) {
-        String sql = "SELECT count(*) FROM information_schema.tables WHERE table_name = ?"; // Adjust for your DB
+        String sql = " SELECT count(*) FROM information_schema.tables "
+                + " WHERE table_name = ?"; // Adjust for your DB
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, tableName);
         return count != null && count > 0;
     }
 
-    private String getDdlSql(String table) {
-        return ResourceAccessUtils.getResourceContent(dbProps.getDdlSchemaDir() + table + ".sql");
+    private String getDdlSql(String tableName) {
+        return ResourceAccessUtils.getResourceContent(dbProps.getDdlSchemaDir() + tableName + ".sql");
     }
 
     private void addTableBySql(String sql) {
@@ -107,24 +111,26 @@ public class DataInitializer implements ApplicationRunner {
 
     private void addUserRolesConstraintsBySql() {
         if (!checkConstraintExists("user_roles", "FK_role_id_8r4j43ygjdswug4d")) {
-            jdbcTemplate.execute(USER_ROLES_CONSTRAINTS_1);
+            String ddlSql = String.format(USER_ROLES_CONSTRAINTS_1);
+            jdbcTemplate.execute(ddlSql);
         }
         if (!checkConstraintExists("user_roles", "FK_user_info_id_kndbx0sibxi")) {
-            jdbcTemplate.execute(USER_ROLES_CONSTRAINTS_2);
+            String ddlSql = String.format(USER_ROLES_CONSTRAINTS_2);
+            jdbcTemplate.execute(ddlSql);
         }
     }
 
     private Boolean checkConstraintExists(String tableName, String constraintName) {
         String sql = " SELECT count(*) FROM information_schema.table_constraints "
-                + "WHERE table_schema = 'public' AND table_name = ? AND constraint_name = ? ";
+                + "WHERE table_name = ? AND constraint_name = ? ";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, tableName, constraintName);
         return count != null && count > 0;
     }
 
-    protected void truncateDataWhenNeeded(String table) {
-        Boolean hasData = checkTableDataExists(table);
+    protected void truncateDataWhenNeeded(String tableName) {
+        Boolean hasData = checkTableDataExists(tableName);
         if (hasData && dbProps.getTruncateMockData()) {
-            String ddlSql = String.format(TRUNC_TABLE, table);
+            String ddlSql = String.format(TRUNC_TABLE, tableName);
             if (!ddlSql.isEmpty()) {
                 jdbcTemplate.execute(ddlSql);
             }
