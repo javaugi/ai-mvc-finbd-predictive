@@ -6,11 +6,23 @@ package com.jvidia.aimlbda.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.MapPropertySource;
 
 @Slf4j
 public class LogUtils {
+
+    public static void logBeans(String[] beans) {
+        log.debug("\n## MyApplication START LOGGING {} ");
+        Arrays.sort(beans);
+        for (String bean : beans) {
+            log.debug(bean);
+        }
+        log.debug("## End LOGGING");
+    }
+
     public static void logMap(String from, Map<String, Object> map) {
         log.debug("\n## START LOGGING {} ", from);
         for (String key : map.keySet()) {
@@ -46,6 +58,18 @@ public class LogUtils {
                 .forEachRemaining(k -> {
                     log.debug("PARAM key {}, value {}", k, req.getAttribute(k));
                 });
+        log.debug("## End LOGGING");
+    }
+
+    public static void logRunnerMap(String from, MapPropertySource mapPropertySource) {
+        log.debug("\n## START LOGGING {} ", from);
+        mapPropertySource.getSource().keySet()
+                .stream()
+                .filter(k -> (k.startsWith("spring.datasource")))
+                .forEach(k -> {
+                    log.debug("ENV key={}  value={}", k, mapPropertySource.getSource().get(k));
+                }
+                );
         log.debug("## End LOGGING");
     }
 }

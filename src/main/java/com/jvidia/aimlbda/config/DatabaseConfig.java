@@ -75,7 +75,6 @@ public class DatabaseConfig {
         dataSource.setIdleTimeout(300000);
         dataSource.setConnectionTimeout(20000);
         dataSource.setMaxLifetime(1200000);
-        //dataSource.setSchema(this.dbProps.getSchema());
 
         return dataSource;
     }
