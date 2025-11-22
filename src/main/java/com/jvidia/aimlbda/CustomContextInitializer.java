@@ -52,36 +52,33 @@ public class CustomContextInitializer implements ApplicationContextInitializer<C
     private void configureProdProperties(Properties props) {
         props.setProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/FINBDA_PROD");
         props.setProperty("spring.datasource.username", "finbda_prod_user");
-        props.setProperty("spring.datasource.password", "prodpass");
-        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
-        props.setProperty("spring.datasource.name", "FINBDA_PROD");
-        props.setProperty("custom.datasource.ddlSchemaDir", "/ddl/prod/");
+        props.setProperty("spring.datasource.password", "${PG_DB_PROD_PWD}");
         props.setProperty("custom.datasource.host", "localhost");
         props.setProperty("custom.datasource.port", "5432");
         props.setProperty("custom.datasource.database", "FINBDA_PROD");
+        props.setProperty("spring.datasource.name", "FINBDA_PROD");
+        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
     }
 
     private void configureDevProperties(Properties props) {
         props.setProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/FINBDA_DEV");
         props.setProperty("spring.datasource.username", "finbda_dev_user");
-        props.setProperty("spring.datasource.password", "devpass");
-        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
-        props.setProperty("spring.datasource.name", "FINBDA_DEV");
-        props.setProperty("custom.datasource.ddlSchemaDir", "/ddl/dev/");
+        props.setProperty("spring.datasource.password", "${PG_DB_DEV_PWD}");
         props.setProperty("custom.datasource.host", "localhost");
         props.setProperty("custom.datasource.port", "5432");
         props.setProperty("custom.datasource.database", "FINBDA_DEV");
+        props.setProperty("spring.datasource.name", "FINBDA_DEV");
+        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
     }
 
     private void configureTestProperties(Properties props) {
         props.setProperty("spring.datasource.url", "jdbc:postgresql://localhost:5432/FINBDA_TEST");
         props.setProperty("spring.datasource.username", "finbda_test_user");
-        props.setProperty("spring.datasource.password", "testpass");
-        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
-        props.setProperty("spring.datasource.name", "FINBDA_TEST");
-        props.setProperty("custom.datasource.ddlSchemaDir", "/ddl/test/");
+        props.setProperty("spring.datasource.password", "${PG_DB_TEST_PWD}");
         props.setProperty("custom.datasource.host", "localhost");
         props.setProperty("custom.datasource.port", "5432");
         props.setProperty("custom.datasource.database", "FINBDA_TEST");
+        props.setProperty("spring.datasource.name", "FINBDA_TEST");
+        props.setProperty("spring.datasource.driver-class-name", "org.postgresql.Driver");
     }
 }

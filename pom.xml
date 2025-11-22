@@ -58,13 +58,11 @@
     
         <github.victools.version>4.38.0</github.victools.version>
         <pact.version>4.6.17</pact.version>
-        <jasypt.version>3.0.5</jasypt.version>
         <opentelemetry.pom.version>1.55.0</opentelemetry.pom.version>
         <opentelemetry.instru.pom.version>2.21.0</opentelemetry.instru.pom.version>
         <opentelemetry.prom.version>0.9.1</opentelemetry.prom.version>
         <opentelemetry.semconv.version>1.37.0</opentelemetry.semconv.version>
-   
-        <spring-dotenv.version>4.0.0</spring-dotenv.version>
+
         <mapstruct.version>1.6.3</mapstruct.version>
         <modelmapper.version>3.2.5</modelmapper.version>
         <javafaker.version>1.0.2</javafaker.version>
@@ -73,9 +71,30 @@
         <com.theokanning.openai.version>0.18.2</com.theokanning.openai.version>
         <httpclient.version>4.5.14</httpclient.version>
         <commons-csv.version>1.14.0</commons-csv.version>
+
+        <jasypt.version>3.0.5</jasypt.version>
+        <spring-dotenv.version>4.0.0</spring-dotenv.version>
     </properties> 
     
     <dependencies>
+        <dependency>
+            <groupId>com.github.ulisesbocchio</groupId>
+            <artifactId>jasypt-spring-boot-starter</artifactId>
+            <version>${jasypt.version}</version>
+        </dependency>       
+        <dependency>
+            <groupId>me.paulschwarz</groupId>
+            <artifactId>spring-dotenv</artifactId>
+            <version>${spring-dotenv.version}</version>
+        </dependency>               
+        <!-- 
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
+        </dependency>        
+        -->        
+
         <dependency>
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-core</artifactId>
@@ -114,12 +133,6 @@
             <artifactId>netty-handler</artifactId>
         </dependency>        
         
-        <dependency>
-            <groupId>com.github.ulisesbocchio</groupId>
-            <artifactId>jasypt-spring-boot-starter</artifactId>
-            <version>${jasypt.version}</version>
-        </dependency>       
-                
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -210,7 +223,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
-
         
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -888,11 +900,6 @@
             <version>${lombok-mapstruct-binding.version}</version>
         </dependency>
         
-        <dependency>
-            <groupId>me.paulschwarz</groupId>
-            <artifactId>spring-dotenv</artifactId>
-            <version>${spring-dotenv.version}</version>
-        </dependency>        
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>

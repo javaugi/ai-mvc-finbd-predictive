@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS audit_logs (
     id BIGSERIAL PRIMARY KEY,
+    version BIGINT,
     category VARCHAR(50),
     region VARCHAR(32),
     description VARCHAR(255),

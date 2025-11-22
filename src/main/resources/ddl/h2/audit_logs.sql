@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS audit_logs (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
+    ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+    version BIGINT,
     category VARCHAR(50),
     region VARCHAR(32),
     description VARCHAR(255),

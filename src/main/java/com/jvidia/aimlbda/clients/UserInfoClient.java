@@ -75,7 +75,7 @@ public class UserInfoClient {
             }
 
             if (!userRoles.isEmpty()) {
-                this.userRoleRepository.saveAllAndFlush(userRoles);
+                this.userRoleRepository.saveAll(userRoles);
             }
         }
 
@@ -93,7 +93,7 @@ public class UserInfoClient {
             }
 
             if (!users.isEmpty()) {
-                userInfoRepository.saveAllAndFlush(users);
+                userInfoRepository.saveAll(users);
             }
             log.info("Total users {}", userInfoRepository.count());
         } catch (BeansException e) {
@@ -115,7 +115,7 @@ public class UserInfoClient {
         }
 
         if (!roles.isEmpty()) {
-            this.roleRepository.saveAllAndFlush(roles);
+            this.roleRepository.saveAll(roles);
         }
         log.info("Total roles {}", roleRepository.count());
     }

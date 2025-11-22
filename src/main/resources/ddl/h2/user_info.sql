@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS user_info (
-    ID INT PRIMARY KEY AUTO_INCREMENT,
+    ID BIGINT PRIMARY KEY AUTO_INCREMENT,
+    version BIGINT,
     username VARCHAR(65),
     email VARCHAR(255),
     password VARCHAR(255),

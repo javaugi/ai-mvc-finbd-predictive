@@ -1,4 +1,0 @@
-CREATE TABLE IF NOT EXISTS prod_schema.roles (
-    id BIGSERIAL PRIMARY KEY,
-    role VARCHAR(255) NOT NULL
-);

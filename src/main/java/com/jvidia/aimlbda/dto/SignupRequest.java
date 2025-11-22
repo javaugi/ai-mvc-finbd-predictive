@@ -21,7 +21,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class SignupRequest {
 
-    private int id;
+    private Long id;
+    private Long version;
 
     private String username;
     @Email(message = "Must be email")

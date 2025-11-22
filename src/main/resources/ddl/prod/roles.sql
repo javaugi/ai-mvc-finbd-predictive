@@ -1,4 +1,5 @@
 CREATE TABLE IF NOT EXISTS roles (
     id BIGSERIAL PRIMARY KEY,
+    version BIGINT,
     role VARCHAR(255) NOT NULL
 );

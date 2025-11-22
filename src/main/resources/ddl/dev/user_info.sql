@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS user_info (
     id BIGSERIAL PRIMARY KEY,
+    version BIGINT,
     username VARCHAR(65),
     email VARCHAR(255),
     password VARCHAR(255),

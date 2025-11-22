@@ -70,11 +70,6 @@ public class DatabaseConfig {
                 .initializeDataSourceBuilder()
                 .type(HikariDataSource.class)
                 .build();
-        dataSource.setMaximumPoolSize(20);
-        dataSource.setMinimumIdle(2);
-        dataSource.setIdleTimeout(300000);
-        dataSource.setConnectionTimeout(20000);
-        dataSource.setMaxLifetime(1200000);
 
         return dataSource;
     }
