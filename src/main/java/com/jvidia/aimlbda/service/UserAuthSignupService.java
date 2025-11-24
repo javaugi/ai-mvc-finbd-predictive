@@ -71,7 +71,7 @@ public class UserAuthSignupService {
 
     public ResponseEntity<?> register(SignupRequest signupRequest) {
         try{
-            UserInfo user = mapper.singupRequestDtoToUserInfo(signupRequest);
+            UserInfo user = mapper.singupRequestToUserInfo(signupRequest);
             log.debug("register signupRequest {} user {}", signupRequest, user);
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
             user.setEmail(signupRequest.getEmail());

@@ -28,6 +28,10 @@ public class UserInfo {
     @Version
     private Long version;
 
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean enabled = true;
+
     private String username;
     private String email;
     private String password;

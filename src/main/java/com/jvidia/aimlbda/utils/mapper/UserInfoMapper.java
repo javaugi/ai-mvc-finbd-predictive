@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring")
 public interface UserInfoMapper {
 
-    UserInfo singupRequestDtoToUserInfo(SignupRequest signupRequest);
+    UserInfo singupRequestToUserInfo(SignupRequest signupRequest);
     SignupRequest userInfoToSignupRequest(UserInfo userInfo);
 
 }

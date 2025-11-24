@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.jvidia.aimlbda.test;
+package com.jvidia.aimlbda;
 
 import com.jvidia.aimlbda.config.DatabaseProperties;
 import static org.junit.jupiter.api.Assertions.assertNotNull;

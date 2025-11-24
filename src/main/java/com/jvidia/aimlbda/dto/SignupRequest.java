@@ -23,10 +23,11 @@ public class SignupRequest {
 
     private Long id;
     private Long version;
+    private boolean enabled;
 
     private String username;
+    //@NotBlank(message = "Email must not be empty")
     @Email(message = "Must be email")
-    @NotBlank(message = "Email must not be empty")
     private String email;
     @Pattern(regexp = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$", message = "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character")
     private String password;

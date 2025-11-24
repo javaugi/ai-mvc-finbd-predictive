@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     version BIGINT,
+    enabled BOOLEAN DEFAULT TRUE,
     username VARCHAR(65),
     email VARCHAR(255),
     password VARCHAR(255),
