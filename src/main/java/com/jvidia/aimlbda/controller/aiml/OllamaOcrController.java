@@ -160,6 +160,7 @@ public class OllamaOcrController {
     }
 
     private Path generateDocx(String text, String filename) throws IOException {
+        
         XWPFDocument doc = new XWPFDocument();
         XWPFParagraph p = doc.createParagraph();
         XWPFRun run = p.createRun();
@@ -169,6 +170,7 @@ public class OllamaOcrController {
         try (FileOutputStream out = new FileOutputStream(output.toFile())) {
             doc.write(out);
         }
+        doc.close();
         return output;
     }
 

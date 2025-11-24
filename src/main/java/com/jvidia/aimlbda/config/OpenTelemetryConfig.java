@@ -12,6 +12,7 @@ import io.opentelemetry.sdk.OpenTelemetrySdk;
 import io.opentelemetry.sdk.resources.Resource;
 import io.opentelemetry.sdk.trace.SdkTracerProvider;
 import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+
 //import io.opentelemetry.semiconv.ResourceAttributes;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,6 +40,7 @@ This example shows both automatic instrumentation (provided by Spring Boot Start
 public class OpenTelemetryConfig {
 
     @Bean
+    @SuppressWarnings("null")
     public OpenTelemetry openTelemetry() {
         // 1. Define attributes for your resource
         Attributes attributes = Attributes.builder()

@@ -94,7 +94,7 @@ public class OpenAiDsController {
  
     //- this DOES NOT works though
     @GetMapping("/chatgen")
-    public Map generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
+    public Map<String, Object> generate(@RequestParam(value = "message", defaultValue = "Tell me a joke") String message) {
         //message = ML_Q;
         return Map.of("generation", this.chatModel.call(message));
     }

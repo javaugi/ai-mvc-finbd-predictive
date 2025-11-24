@@ -6,7 +6,6 @@ import com.jvidia.aimlbda.utils.types.AuthProvider;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
 import java.util.List;

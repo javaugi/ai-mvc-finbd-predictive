@@ -1,14 +1,12 @@
 package com.jvidia.aimlbda.dto;
 
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.lang.Nullable;
 import org.springframework.web.ErrorResponse;
 
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 

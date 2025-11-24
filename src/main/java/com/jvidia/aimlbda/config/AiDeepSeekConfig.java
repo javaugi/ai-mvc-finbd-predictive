@@ -43,7 +43,6 @@ public class AiDeepSeekConfig implements CommandLineRunner{
     private void hide(Resource resource, String... args) {
         //doNothing
     }
-    
 
     public static final String DS_OPENAI_API = "DS_OPENAI_API";
     public static final String DS_OPENAI_API_SEC = "DS_OPENAI_API_SEC";

@@ -4,14 +4,12 @@
  */
 package com.jvidia.aimlbda.dto;
 
-import jakarta.persistence.Column;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.LastModifiedDate;
+
 
 @Data
 @Builder(toBuilder = true)

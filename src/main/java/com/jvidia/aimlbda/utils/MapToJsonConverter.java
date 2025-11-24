@@ -24,14 +24,13 @@ import org.springframework.stereotype.Component;
 public class MapToJsonConverter implements AttributeConverter<Map<String, Object>, String> {
 
     private final ObjectMapper objectMapper;
-    private static final ObjectMapper objectMapperNew = new ObjectMapper()
+    
+    public MapToJsonConverter() {
+        objectMapper = new ObjectMapper()
         .enable(SerializationFeature.INDENT_OUTPUT)
         .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
         .registerModule(new JavaTimeModule())
         .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
-    
-    public MapToJsonConverter() {
-        objectMapper = new ObjectMapper();
         System.out.println("MapToJsonConverter instantiated!"); // Debug line
         // Required public no-arg constructor
     }

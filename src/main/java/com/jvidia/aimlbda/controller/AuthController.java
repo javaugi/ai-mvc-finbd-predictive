@@ -187,6 +187,7 @@ public class AuthController {
             // You can add provider-specific logout URLs here if needed
             // For example, for Google: 
             // "https://accounts.google.com/Logout"
+            log.debug("logoutOAuth registrationId {}", registrationId);
         }
 
         // Perform standard logout

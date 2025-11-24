@@ -6,6 +6,8 @@ package com.jvidia.aimlbda.service.procedure;
 
 import com.jvidia.aimlbda.dto.TestUserDTO;
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
@@ -17,10 +19,12 @@ public class TestUserServiceJdbc {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+
+    @SuppressWarnings("deprecation")   
     public List<TestUserDTO> findUsersByCity(String city, Integer minAge) {
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("find_users_by_city");
-        //call.execute(Map.of("p_acc_id", 101, "p_amt", 500));
+        call.execute(Map.of("p_acc_id", 101, "p_amt", 500));
 
         String sql = "SELECT * FROM find_users_by_city(?, ?)";
 

@@ -7,7 +7,6 @@ package com.jvidia.aimlbda.service;
 import static com.jvidia.aimlbda.config.OllamaConfig.OLLAMA_CHAT_MODEL;
 import com.jvidia.aimlbda.entity.AuditLog;
 import dev.langchain4j.data.document.Document;
-//import dev.langchain4j.data.document.parser.TextDocumentParser;
 import dev.langchain4j.data.document.splitter.DocumentSplitters;
 import dev.langchain4j.data.embedding.Embedding;
 import dev.langchain4j.data.segment.TextSegment;
@@ -18,6 +17,8 @@ import dev.langchain4j.model.input.PromptTemplate;
 import dev.langchain4j.model.output.Response;
 import dev.langchain4j.service.AiServices;
 import dev.langchain4j.store.embedding.EmbeddingStore;
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.stereotype.Service;
 import dev.langchain4j.data.document.Metadata;
 
@@ -32,6 +33,7 @@ import java.time.temporal.ChronoUnit;
 import dev.langchain4j.model.chat.ChatModel;
 import org.springframework.beans.factory.annotation.Qualifier;
 
+@Slf4j
 @Service
 //@RequiredArgsConstructor(onConstructor = @__(
 //        @Autowired))
@@ -69,6 +71,7 @@ public class DataAnalysisService {
         // Step 4: Create a retriever
         EmbeddingStoreContentRetriever retriever = EmbeddingStoreContentRetriever.from(embeddingStore);
         //EmbeddingStoreContentRetriever.from(embeddingStore, embeddingModel);
+        log.debug("analyzeDataWithRAG retriever {}", retriever);
 
         // Step 5: Create an AI service with RAG
         Analyst analyst = AiServices.builder(Analyst.class)
@@ -81,7 +84,7 @@ public class DataAnalysisService {
         return analyst.analyzeData(question);
     }
 
-    private List<AuditLog> retrieveRelevantData(String question) {
+    protected List<AuditLog> retrieveRelevantData(String question) {
         // Simple keyword-based retrieval - enhance with more sophisticated logic
         if (question.toLowerCase().contains("category")) {
             return auditLogRepository.findAll();
@@ -91,7 +94,7 @@ public class DataAnalysisService {
         return auditLogRepository.findAll();
     }
 
-    private List<Document> createDocumentsFromData1(List<AuditLog> data) {
+    protected List<Document> createDocumentsFromData1(List<AuditLog> data) {
         return data.stream()
                 .map(entity -> String.format(
                 "Category: %s, Value: %.2f, Date: %s, Region: %s, Description: %s",
@@ -105,7 +108,7 @@ public class DataAnalysisService {
                 .collect(Collectors.toList());
     }
 
-    private List<Document> createDocumentsFromData2(List<AuditLog> data) {
+    protected List<Document> createDocumentsFromData2(List<AuditLog> data) {
         return data.stream()
                 .map(entity -> {
                     String text = String.format(
@@ -128,7 +131,7 @@ public class DataAnalysisService {
                 .collect(Collectors.toList());
     }
 
-    private List<Document> createDocumentsFromData(List<AuditLog> data) {
+    protected List<Document> createDocumentsFromData(List<AuditLog> data) {
         return data.stream()
                 .map(entity -> {
                     // Create text content
@@ -158,7 +161,7 @@ public class DataAnalysisService {
                 .collect(Collectors.toList());
     }
 
-    private void embedDocuments(List<Document> documents) {
+    protected void embedDocuments(List<Document> documents) {
         documents.forEach(document -> {
             // Split document into segments
             List<TextSegment> segments = DocumentSplitters.recursive(300, 0).split(document);

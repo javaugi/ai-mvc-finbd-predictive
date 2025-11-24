@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.jvidia.aimlbda.dto.aiml.CompletionRequest;
 import com.jvidia.aimlbda.dto.aiml.EventData;
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -23,8 +21,6 @@ import reactor.core.publisher.Flux;
 
 @Service
 public class OpenAiApiService {
-
-    private final static Logger log = LoggerFactory.getLogger(OpenAiApiService.class);
 
     private final String prompt = """
                 Explain quantum computing.
@@ -98,7 +94,7 @@ public class OpenAiApiService {
                 .map(event -> event.getChoices().get(0).getText());
     }
 
-    private HttpHeaders setupHeaders() {
+    protected HttpHeaders setupHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.set("Authorization", openAiKey); // If API key is needed
         headers.setBearerAuth(openAiKey);

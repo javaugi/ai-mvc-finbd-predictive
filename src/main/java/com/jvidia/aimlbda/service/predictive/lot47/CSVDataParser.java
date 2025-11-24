@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CSVDataParser {
 
-    private static final String SRC_MAIN_RESOURCE_DOCS_LOT47 = "src/main/resources";
+    //private static final String SRC_MAIN_RESOURCE_DOCS_LOT47 = "src/main/resources";
     private static final String DOCS_LOT47 = "/lottdocs/mil4701012020to10252025.csv";
     private static final String DOCS_FANTACY5 = "/lottdocs/mif5 01012020To10302025.csv";
 
