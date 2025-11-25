@@ -1,5 +1,6 @@
 package com.jvidia.aimlbda.service;
 
+import com.jvidia.aimlbda.dto.JwtResponse;
 import com.jvidia.aimlbda.dto.LoginRequest;
 import com.jvidia.aimlbda.dto.SignupRequest;
 import com.jvidia.aimlbda.entity.Role;
@@ -18,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -26,6 +28,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 
 @Slf4j
 @Service
@@ -58,9 +61,12 @@ public class UserAuthSignupService {
             log.debug("authenticate auth.isAuthenticated() {}", auth.isAuthenticated());
 
             if (auth.isAuthenticated()) {
+                SecurityContextHolder.getContext().setAuthentication(auth);
                 Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
                 String jwtToken = jwtService.generateToken(loginRequest.getEmail(), authorities);
-                return ResponseEntity.ok().body(jwtToken);
+
+                JwtResponse response = new JwtResponse(jwtToken, jwtService.getJwtExpiration(), "Bearer");
+                return ResponseEntity.ok().body(response);
             } else {
                 throw new BadCredentialsException("Invalid username or password");
             }
@@ -70,21 +76,27 @@ public class UserAuthSignupService {
     }
 
     public ResponseEntity<?> register(SignupRequest signupRequest) {
-        try{
+        try {
+            if (userInfoRepository.findByUsername(signupRequest.getUsername()).isPresent()) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("Username exists");
+            }
+
             UserInfo user = mapper.singupRequestToUserInfo(signupRequest);
             log.debug("register signupRequest {} user {}", signupRequest, user);
             user.setPassword(passwordEncoder.encode(signupRequest.getPassword()));
             user.setEmail(signupRequest.getEmail());
             user.setName(signupRequest.getName());
+            user.setUsername(signupRequest.getUsername());
             user.setProvider(AuthProvider.local);
             user.setProviderId("LOCAL");
-            user.setEmailVerified(false);
+            user.setEmailVerified(true);
             user.setImageUrl(null);
             List<Role> roles = new ArrayList<>();
             roles.add(roleService.getRoleByName(RoleType.ROLE_USER));
             roleService.giveRolesToUser(user, roles);
+
             userInfoRepository.save(user);
-            return ResponseEntity.ok().body("Registration Successful");
+            return ResponseEntity.status(HttpStatus.CREATED).build();
 
         }catch (DataIntegrityViolationException e){
             throw new DuplicateUserException("Invalid Registration Request");

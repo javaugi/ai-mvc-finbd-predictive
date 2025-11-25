@@ -52,7 +52,7 @@ public class SecurityConfig {
     @Value("application.base-url")
     private String appHostPort;
 
-    private final String[] PERMIT_ALL_PATHS = List.of("/auth/login", "/auth/signup", "/auth/logout",
+    private final String[] PERMIT_ALL_PATHS = List.of("/public/**", "/auth/login", "/auth/signup", "/auth/logout",
             "/error", "/h2-console", "/h2-console/**", "/favicon.ico", "/webjars", "/webjars/**",
             "/actuator/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html", "/api/testonly/**")
             .toArray(new String[0]);

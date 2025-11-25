@@ -6,11 +6,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +26,7 @@ public class UserInfoUserDetails implements UserDetails {
         this.username = userInfo.getEmail();
         this.password = userInfo.getPassword();
         this.authorities = userInfo.getUserRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().getRole()))
+                .map(role -> new SimpleGrantedAuthority(role.getRole().getName()))
                 .collect(Collectors.toList());
     }
 }

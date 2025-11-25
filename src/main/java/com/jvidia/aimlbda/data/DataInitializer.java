@@ -143,5 +143,5 @@ public class DataInitializer implements ApplicationRunner {
         return count != null && count > 0;
     }
 
-    public static final List<String> DDL_TABLES = List.of("audit_logs", "roles", "test_users", "user_info", "users", "user_roles");    
+    public static final List<String> DDL_TABLES = List.of("audit_logs", "roles", "test_users", "user_info", "users", "user_roles", "privileges", "role_privileges");    
 }

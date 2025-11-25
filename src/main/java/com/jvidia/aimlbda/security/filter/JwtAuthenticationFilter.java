@@ -28,6 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenService jwtTokenService;
     private final UserDetailsService userDetailsService;
     private final List<String> excludedPaths = List.of(
+            "/public/",
             "/auth/login",
             "/auth/signup",
             "/auth/logout",

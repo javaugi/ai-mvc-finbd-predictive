@@ -19,7 +19,7 @@ public class RoleService {
     }
 
     public Role getRoleByName(RoleType roleName) {
-        return roleRepository.findByRole(roleName.name())
+        return roleRepository.findByName(roleName.name())
                 .orElse(Role.builder().build());
     }
 

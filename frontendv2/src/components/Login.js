@@ -18,11 +18,14 @@ const Login = () => {
         // For demo purposes - in real app, you'd call your backend
         alert('Internal login would be implemented here');
         try {
-            const response = await axios.post("http://localhost:8088/auth/login", {
+            //const resp = await axios.post("/auth/login", {username, password});
+            const resp = await axios.post("http://localhost:8088/auth/login", {
                 email: username,
                 password: password,
             });
-            localStorage.setItem("token", response.data);
+            const {token} = resp.data;
+            localStorage.setItem("token", token);
+            axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
             navigate('/dashboard');
         } catch (error) {
             console.error("Login error:", error);
@@ -57,7 +60,7 @@ const Login = () => {
                         <div style={{marginBottom: '1rem'}}>
                             <input
                                 type="text"
-                                placeholder="Username"
+                                placeholder="Username or email"
                                 value={credentials.username}
                                 onChange={(e) => setCredentials({...credentials, username: e.target.value})}
                                 style={{width: '100%', padding: '8px', marginBottom: '10px'}}
@@ -74,6 +77,9 @@ const Login = () => {
                             🔐 Internal Login (Demo)
                         </button>
                     </form>
+
+                    {error && <div className="error">{error}</div>}
+
                     <div style={{marginTop: '1rem', fontSize: '12px', color: '#999'}}>
                         <p>Internal login is for demo purposes only</p>
                     </div>

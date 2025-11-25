@@ -7,6 +7,7 @@ import com.jvidia.aimlbda.service.JwtTokenService;
 import com.jvidia.aimlbda.service.UserInfoService;
 import com.jvidia.aimlbda.utils.CookieUtils;
 import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.types.RoleType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +25,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @lombok.extern.slf4j.Slf4j
@@ -53,9 +53,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String email = authUser.getAttribute("email");
         UserInfo savedUser = this.userInfoService.findByEmail(email).orElse(null);
         List<UserRole> userRoles = savedUser != null ? savedUser.getUserRoles() : null;
-        Collection<? extends GrantedAuthority> authorities = userRoles != null ? userRoles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole().getRole()))
-                .toList() : null;
+        Collection<? extends GrantedAuthority> authorities = RoleType.getGrantedAuthoritiesByUserRoles(userRoles);
         String token = jwtTokenService.generateToken(email, authorities);
 
         String redirectUrl = UriComponentsBuilder.fromUriString(determineTargetUrl(request, response, authentication))

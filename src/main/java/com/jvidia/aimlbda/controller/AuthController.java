@@ -42,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<?> login(@Valid @RequestBody SignupRequest signupRequest) {
+    public ResponseEntity<?> register(@Valid @RequestBody SignupRequest signupRequest) {
         log.debug("login signupRequest {}", signupRequest);
         return authSignupService.register(signupRequest);
     }

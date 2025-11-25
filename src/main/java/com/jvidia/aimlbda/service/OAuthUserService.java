@@ -47,8 +47,7 @@ public class OAuthUserService implements OAuth2UserService<OAuth2UserRequest, OA
         log.debug("OAuthUserService.loaduser OAuth2UserRequest {}", userRequest);
         OAuth2UserService<OAuth2UserRequest, OAuth2User> defaultOauthUserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = defaultOauthUserService.loadUser(userRequest);
-        log.debug("OAuthUserService.loaduser oAuth2User name {} authorities {} ",
-                oAuth2User.getName(), oAuth2User.getAuthorities());
+        log.debug("OAuthUserService.loaduser oAuth2User name {} authorities {} ", oAuth2User.getName(), oAuth2User.getAuthorities());
         LogUtils.logMap("OAuthUserService.loadUser", oAuth2User.getAttributes());
 
         String provider = userRequest.getClientRegistration().getRegistrationId();

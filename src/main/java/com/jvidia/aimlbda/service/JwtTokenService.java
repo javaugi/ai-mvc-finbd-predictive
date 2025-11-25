@@ -31,6 +31,10 @@ public class JwtTokenService {
     @Value("${security.jwt.token.expire-length:86400000}")
     private long jwtExpiration;
 
+    public long getJwtExpiration() {
+        return jwtExpiration;
+    }
+
     public String generateToken(String username, Collection<? extends GrantedAuthority> roles) {
         log.debug("generateToken username {} roles {} ", username, roles);
 

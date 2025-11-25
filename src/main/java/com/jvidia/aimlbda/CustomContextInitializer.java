@@ -5,15 +5,16 @@
 package com.jvidia.aimlbda;
 
 import com.jvidia.aimlbda.config.ProfileDevConfig;
+import com.jvidia.aimlbda.config.ProfileH2Config;
 import com.jvidia.aimlbda.config.ProfileProdConfig;
 import com.jvidia.aimlbda.config.ProfileTestConfig;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Profiles;
 import org.springframework.core.env.PropertiesPropertySource;
 import org.springframework.stereotype.Component;
 
@@ -24,29 +25,34 @@ public class CustomContextInitializer implements ApplicationContextInitializer<C
     public void initialize(ConfigurableApplicationContext applicationContext) {
         ConfigurableEnvironment env = applicationContext.getEnvironment();
         if (env.getActiveProfiles() == null || env.getActiveProfiles().length == 0) {
-            env.addActiveProfile(ProfileTestConfig.TEST_PROFILE);
+            env.addActiveProfile(ProfileH2Config.H2_PROFILE);
         }
-        log.debug("MyApplication setEnvironment profiles {}", Arrays.toString(env.getActiveProfiles()));
+
+        List<String> activeprofiles = Arrays.asList(env.getActiveProfiles());
         // Add properties based on active profiles
-        configureDataSourceProperties(env);
+        Properties dbProps = null;
+        if (!activeprofiles.contains(ProfileH2Config.H2_PROFILE)) {
+            dbProps = configureDataSourceProperties(activeprofiles);
+        }
+        // Add properties to environment
+        if (dbProps != null && !dbProps.isEmpty()) {
+            PropertiesPropertySource propertySource = new PropertiesPropertySource("customDataSourceConfig", dbProps);
+            env.getPropertySources().addFirst(propertySource);
+        }
+        log.debug("MyApplication setEnvironment profiles {} \n dbProps {}", activeprofiles, dbProps);
     }
 
-    private void configureDataSourceProperties(ConfigurableEnvironment env) {
+    private Properties configureDataSourceProperties(List<String> activeprofiles) {
         Properties props = new Properties();
-
-        if (env.acceptsProfiles(Profiles.of(ProfileProdConfig.PROD_PROFILE))) {
+        if (activeprofiles.contains(ProfileProdConfig.PROD_PROFILE)) {
             configureProdProperties(props);
-        } else if (env.acceptsProfiles(Profiles.of(ProfileDevConfig.DEV_PROFILE))) {
+        } else if (activeprofiles.contains(ProfileDevConfig.DEV_PROFILE)) {
             configureDevProperties(props);
-        } else if (env.acceptsProfiles(Profiles.of(ProfileTestConfig.TEST_PROFILE))) {
+        } else if (activeprofiles.contains(ProfileTestConfig.TEST_PROFILE)) {
             configureTestProperties(props);
         }
 
-        // Add properties to environment
-        if (!props.isEmpty()) {
-            PropertiesPropertySource propertySource = new PropertiesPropertySource("customDataSourceConfig", props);
-            env.getPropertySources().addFirst(propertySource);
-        }
+        return props;
     }
 
     private void configureProdProperties(Properties props) {

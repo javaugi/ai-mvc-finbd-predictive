@@ -4,9 +4,11 @@
  */
 package com.jvidia.aimlbda.clients;
 
+import com.jvidia.aimlbda.entity.Privilege;
 import com.jvidia.aimlbda.entity.Role;
 import com.jvidia.aimlbda.entity.UserInfo;
 import com.jvidia.aimlbda.entity.UserRole;
+import com.jvidia.aimlbda.repository.PrivilegeRepository;
 import com.jvidia.aimlbda.repository.RoleRepository;
 import com.jvidia.aimlbda.repository.UserInfoRepository;
 import com.jvidia.aimlbda.repository.UserRoleRepository;
@@ -14,23 +16,24 @@ import com.jvidia.aimlbda.utils.types.AuthProvider;
 import com.jvidia.aimlbda.utils.types.RoleType;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class UserInfoClient {
 
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    UserInfoRepository userInfoRepository;
-    @Autowired
-    UserRoleRepository userRoleRepository;
+    final RoleRepository roleRepository;
+    final UserInfoRepository userInfoRepository;
+    final UserRoleRepository userRoleRepository;
+    final PrivilegeRepository privilegeRepository;
     
     public void setup() {
         try {
@@ -45,14 +48,14 @@ public class UserInfoClient {
     }
 
     private void setupUserRoles() {
-        Role roleUser = this.roleRepository.findByRole(RoleType.ROLE_USER.name()).orElse(Role.builder().build());
-        Role roleAdmin = this.roleRepository.findByRole(RoleType.ROLE_ADMIN.name()).orElse(Role.builder().build());
+        Role roleUser = this.roleRepository.findByName(RoleType.ROLE_USER.name()).orElse(Role.builder().build());
+        Role roleAdmin = this.roleRepository.findByName(RoleType.ROLE_ADMIN.name()).orElse(Role.builder().build());
         List<UserInfo> users = this.userInfoRepository.findAll();
         if (!users.isEmpty()) {
             List<UserRole> userRoles = new ArrayList<>();
             UserRole userRole;
             for (UserInfo userInfo : users) {
-                if (roleUser != null && roleUser.getRole() != null) {
+                if (roleUser != null && roleUser.getName() != null) {
                     Optional<UserRole> optUser = this.userRoleRepository.findByRoleAndUserInfo(roleUser, userInfo);
                     if (!optUser.isPresent()) {
                         userRole = UserRole.builder()
@@ -62,7 +65,7 @@ public class UserInfoClient {
                         userRoles.add(userRole);
                     }
                 }
-                if (roleAdmin != null && roleAdmin.getRole() != null) {
+                if (roleAdmin != null && roleAdmin.getName() != null) {
                     Optional<UserRole> optAdm = this.userRoleRepository.findByRoleAndUserInfo(roleAdmin, userInfo);
                     if (!optAdm.isPresent()) {
                         userRole = UserRole.builder()
@@ -104,12 +107,28 @@ public class UserInfoClient {
 
     private void setupRoles() {
         Role entity;
+        Privilege privEntity;
         List<Role> roles = new ArrayList<>();
         Optional<Role> opt;
         for (RoleType rt : RoleType.values()) {
-            opt = this.roleRepository.findByRole(rt.name());
+            opt = this.roleRepository.findByName(rt.name());
             if (!opt.isPresent()) {
-                entity = Role.builder().role(rt.name()).build();
+                Set<Privilege> prevEntities = new HashSet<>();
+                Set<String> privs = RoleType.getPrivilegesByRoleName(rt.name());
+                for (String str : privs) {
+                    Optional<Privilege> optPriv = this.privilegeRepository.findByName(str);
+                    if (optPriv.isPresent()) {
+                        prevEntities.add(optPriv.get());
+                    } else {
+                        privEntity = Privilege.builder().name(str).build();
+                        this.privilegeRepository.save(privEntity);
+                        prevEntities.add(privEntity);
+                    }
+                }
+
+                entity = Role.builder()
+                        .name(rt.name()).privileges(prevEntities)
+                        .build();
                 roles.add(entity);
             }
         }
