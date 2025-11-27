@@ -1,5 +1,6 @@
 package com.jvidia.aimlbda.service;
 
+import com.jvidia.aimlbda.utils.LogUtils;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -85,21 +86,26 @@ public class JwtTokenService {
     }
 
     public String resolveToken(HttpServletRequest req) {
+        LogUtils.logRequest("JwtToenService.resolveToken", req);
         // 1. Check Authorization header first
         String bearerToken = req.getHeader("Authorization");
+        log.debug("resolveToken bearerToken {} ", bearerToken);
         if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
         // 2. Check URL parameter (for OAuth2 redirect)
         String tokenParam = req.getParameter("token");
+        log.debug("resolveToken tokenParam {} ", tokenParam);
         if (tokenParam != null && validateToken(tokenParam)) {
             return tokenParam;
         }
 
         // 3. Check session for OAuth2 authentication
         var session = req.getSession(false);
+        log.debug("resolveToken :Check session for OAuth2 authentication session {} ", session);
         if (session != null) {
             var authentication = SecurityContextHolder.getContext().getAuthentication();
+            log.debug("resolveToken authentication {} ", authentication);
             if (authentication != null && authentication.isAuthenticated()) {
                 return "SESSION_AUTH"; // Special marker for session auth
             }

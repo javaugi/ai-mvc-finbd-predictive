@@ -57,13 +57,13 @@ public class UserAuthSignupService {
     public ResponseEntity<?> authenticate(LoginRequest loginRequest) {
         try {
             log.debug("authenticate loginRequest {} auth.isAuthenticated() {}", loginRequest);
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
             log.debug("authenticate auth.isAuthenticated() {}", auth.isAuthenticated());
 
             if (auth.isAuthenticated()) {
                 SecurityContextHolder.getContext().setAuthentication(auth);
                 Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-                String jwtToken = jwtService.generateToken(loginRequest.getEmail(), authorities);
+                String jwtToken = jwtService.generateToken(loginRequest.getUsername(), authorities);
 
                 JwtResponse response = new JwtResponse(jwtToken, jwtService.getJwtExpiration(), "Bearer");
                 return ResponseEntity.ok().body(response);

@@ -73,7 +73,7 @@ public class DatabaseProperties {
     private Integer poolMinSize = 5;
     private Integer connTimeout = 2000;
 
-    public static enum ProfileSetting {
+    public enum ProfileSetting {
         dev, test, prod, h2
     }
     

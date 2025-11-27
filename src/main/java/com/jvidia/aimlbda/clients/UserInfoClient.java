@@ -139,24 +139,25 @@ public class UserInfoClient {
         log.info("Total roles {}", roleRepository.count());
     }
 
+    //$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry=MyAdminPwd
     static final List<UserInfo> USERS = List.of(
             UserInfo.builder().username("javaugi_g")
                     .email("david.lee.remax@gmail.com")
-                    .password("admin").name("D Lee").firstName("David")
+                    .password("$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry").name("D Lee").firstName("David")
                     .lastName("Lee").middleInitial("Z")
                     .registrationId(AuthProvider.google.toString())
                     .provider(AuthProvider.google).providerId(AuthProvider.google.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build(),
             UserInfo.builder().username("javaugi")
                     .email("javaugi@hotmail.com")
-                    .password("admin").name("D Lee").firstName("David")
+                    .password("$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry").name("D Lee").firstName("David")
                     .lastName("Lee").middleInitial("Z")
                     .registrationId(AuthProvider.github.toString())
                     .provider(AuthProvider.github).providerId(AuthProvider.github.toString())
                     .createdDate(OffsetDateTime.now()).updatedDate(OffsetDateTime.now()).build(),
             UserInfo.builder().username("javaugi.loc")
-                    .email("javaugi@yahoo.com")
-                    .password("admin").name("D Lee").firstName("David")
+                    .email("dlee9591@gmail.com")
+                    .password("$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry").name("D Lee").firstName("David")
                     .lastName("Lee").middleInitial("Z")
                     .registrationId(AuthProvider.local.toString())
                     .provider(AuthProvider.local).providerId(AuthProvider.local.toString())

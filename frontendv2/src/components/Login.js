@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -15,13 +16,11 @@ const Login = () => {
 
     const handleInternalLogin = async (e) => {
         e.preventDefault();
-        // For demo purposes - in real app, you'd call your backend
-        alert('Internal login would be implemented here');
         try {
-            //const resp = await axios.post("/auth/login", {username, password});
-            const resp = await axios.post("http://localhost:8088/auth/login", {
-                email: username,
-                password: password,
+            const {username, password} = credentials;
+            const resp = await axios.post("/auth/login", {
+                username,
+                password,
             });
             const {token} = resp.data;
             localStorage.setItem("token", token);
