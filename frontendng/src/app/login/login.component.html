@@ -1,0 +1,47 @@
+<div class="login-container">
+    <h2>Welcome to the Application</h2>
+    <p>Please log in using one of the following providers:</p>
+
+    <button (click)="loginWithProvider('google')">
+        <img src="google-icon.png" alt="Google">
+        Login with Gmail
+    </button>
+
+    <button (click)="loginWithProvider('github')">
+        <img src="github-icon.png" alt="GitHub">
+        Login with GitHub
+    </button>
+
+    <hr>
+
+    <form [formGroup]="loginForm" (ngSubmit)="handleInternalLogin()">
+        <h3>Internal User Login</h3>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email">
+            <div *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched" class="error-message">
+                Valid email is required.
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input id="password" type="password" formControlName="password">
+            <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="error-message">
+                Password must be at least 6 characters.
+            </div>
+        </div>
+
+        <button type="submit" [disabled]="loginForm.invalid || isLoading">
+            {{ isLoading ? 'Logging In...' : 'Login Internal User' }}
+        </button>
+
+        <div *ngIf="loginError" class="server-error-message">
+            {{ loginError }}
+        </div>
+    </form>
+    <!-- Optional: Display form value in real-time -->
+    <p>Form Status: {{ loginForm.status }}</p>
+    <p>Form Value: {{ loginForm.value | json }}</p>
+</div>

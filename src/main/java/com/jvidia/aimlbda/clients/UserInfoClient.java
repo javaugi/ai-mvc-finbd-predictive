@@ -139,7 +139,7 @@ public class UserInfoClient {
         log.info("Total roles {}", roleRepository.count());
     }
 
-    //$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry=MyAdminPwd
+    //$2a$10$otFk6PYeXqFIPHp9rrN9gOvelESYT.a9dUa.evkcnbVEnhu3zeyry=myAdminPwd
     static final List<UserInfo> USERS = List.of(
             UserInfo.builder().username("javaugi_g")
                     .email("david.lee.remax@gmail.com")

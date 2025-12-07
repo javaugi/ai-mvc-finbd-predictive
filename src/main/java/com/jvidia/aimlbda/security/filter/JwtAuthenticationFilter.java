@@ -57,16 +57,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean shouldNotFilterForSessionAuth(HttpServletRequest request) {
         String path = request.getRequestURI();
+        log.info("shouldNotFilterForSessionAuth path={}", path);
         return excludedPaths.stream().anyMatch(path::startsWith)
-                || hasOAuth2SessionAuthentication(request);
+                || hasOAuth2SessionAuthentication();
     }
 
-    private boolean hasOAuth2SessionAuthentication(HttpServletRequest request) {
+    private boolean hasOAuth2SessionAuthentication() {
         // Check if there's an existing OAuth2 session
         var existingAuth = SecurityContextHolder.getContext().getAuthentication();
-        return existingAuth != null
+        boolean hasOAuth2SessionAuth = existingAuth != null
                 && existingAuth.isAuthenticated()
                 && existingAuth.getPrincipal() instanceof OAuth2User;
+        log.info("hasOAuth2SessionAuthentication existingAuth={}", existingAuth);
+        return hasOAuth2SessionAuth;
     }
 
     @Override

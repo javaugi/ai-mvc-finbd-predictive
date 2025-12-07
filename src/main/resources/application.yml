@@ -18,6 +18,7 @@ spring:
             scope:
               - profile
               - email
+              - openid
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
 #            redirect-uri: http://localhost:8088/login/oauth2/code/google
           github:

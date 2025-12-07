@@ -31,7 +31,6 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
@@ -44,6 +43,15 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/*
+2. Key technical difference
+    OAuth2                  OpenID Connect
+
+    Authorization only      Authentication + Identity
+    Uses Access Token       Uses ID Token (JWT)
+    No standard user info	Standard /userinfo endpoint
+    No ID standard          Standard claims (sub, email, name, picture)
+ */
 @lombok.extern.slf4j.Slf4j
 @Configuration
 @EnableWebSecurity
@@ -87,24 +95,47 @@ public class SecurityConfig {
         return new JwtAuthenticationFilter(jwtTokenService, userDetailsService);
     }
 
-    //Security Filter chain: Contains policies for all the security
+    /*
+    Security Filter chain: Contains policies for all the security - Oauth2 + OpenID Connect (OIDC)
+        1. Use OpenID Connect (OIDC) + OAuth2 + JWT tokens
+        2. React App → Spring Boot API → OAuth2 providers
+        3. Google always uses OpenID Connect for user identity.
+        4. GitHub is the exception — GitHub is NOT a full OIDC provider by default (unless using GitHub Actions OIDC). It is pure OAuth2.
+        5. Internal User: Username + Password -> JWT
+            If you want to make it true OIDC, you would need: An internal Authorization Server like:
+                (1) Keycloak, (2) Okta, (3)Auth0,   or (4) Azure AD / Entra ID
+        6. The BEST SSO approach for you (Modern + Simple)
+            Since you already use Spring Boot + React: Use OpenID Connect (OIDC) + OAuth2 + JWT tokens
+            What you need now is:
+                (1) Choose who is your Identity Provider (SSO Server)
+                (2) Make your Spring Boot apps trust it
+                (3) Keycloak (BEST for full control): Free, open-source
+                    You can add:
+                        (1) Google, (2) GitHub, and (3) Internal users
+                    Handles:
+                        (1) SSO, (2) MFA, (3) Roles, (4) User federation, and (5) Industry-standard choice
+        7. Architecture for SSO
+            React App → Identity Provider (Keycloak / Azure / Spring Auth Server)
+                     ↓ issues JWT
+            Spring Boot services ← validate JWT
+            Other apps       ← validate same JWT
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         log.debug("securityFilterChain ..... ");
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorizeRequests
-                       -> authorizeRequests
-                       .requestMatchers(PERMIT_ALL_PATHS).permitAll()
-                       .anyRequest().authenticated()
-               )
-               .oauth2Login(oauth2 -> oauth2
-               .authorizationEndpoint(authEndpoint -> authEndpoint
-               .authorizationRequestRepository(httpCookieOAuth2AutherizationRequestRepository))
-               .redirectionEndpoint(redirect -> redirect.baseUri("/login/oauth2/code/*"))
-               .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService())
-               )
-               .successHandler(new OAuth2LoginSuccessHandler(jwtTokenService, userInfoService, httpCookieOAuth2AutherizationRequestRepository))                )
+                        -> authorizeRequests
+                        .requestMatchers(PERMIT_ALL_PATHS).permitAll()
+                        .anyRequest().authenticated()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                .authorizationEndpoint(authEndpoint -> authEndpoint
+                .authorizationRequestRepository(httpCookieOAuth2AutherizationRequestRepository))
+                .redirectionEndpoint(redirect -> redirect.baseUri("/login/oauth2/code/*"))
+                .userInfoEndpoint(userInfo -> userInfo.userService(oAuth2UserService()))
+                .successHandler(new OAuth2LoginSuccessHandler(jwtTokenService, userInfoService, httpCookieOAuth2AutherizationRequestRepository)))
                 .logout(logout -> logout
                 .logoutUrl("/auth/logout") // Single logout endpoint
                 .logoutSuccessHandler((request, response, authentication) -> {
@@ -138,7 +169,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:8088",
-                "http://localhost:5173", "http://localhost:3000"));
+                "http://localhost:5173", "http://localhost:3000", "http://localhost:4200"));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type",
                 "X-Auth-Token", "X-API-KEY", "X-User-Id", "X-User-Name"));
@@ -208,7 +239,6 @@ public class SecurityConfig {
         return NoOpPasswordEncoder.getInstance();
     }
     // */
-
     @Bean
     public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
         log.debug("oAuth2UserService ...");

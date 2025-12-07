@@ -1,0 +1,10 @@
+#!/bin/sh
+echo "check node"
+node -v
+echo "check npm"
+npm -v
+echo "check ng"
+ng v
+echo "check react"
+npm list react
+

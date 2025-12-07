@@ -1,0 +1,6 @@
+#!/bin/sh
+reset
+npm install
+ng build
+ng serve
+

@@ -57,7 +57,11 @@ public class UserAuthSignupService {
     public ResponseEntity<?> authenticate(LoginRequest loginRequest) {
         try {
             log.debug("authenticate loginRequest {} auth.isAuthenticated() {}", loginRequest);
-            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+            String username = loginRequest.getUsername();
+            if (username == null) {
+                username = loginRequest.getEmail();
+            }
+            Authentication auth = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, loginRequest.getPassword()));
             log.debug("authenticate auth.isAuthenticated() {}", auth.isAuthenticated());
 
             if (auth.isAuthenticated()) {

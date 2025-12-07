@@ -71,11 +71,139 @@
         <com.theokanning.openai.version>0.18.2</com.theokanning.openai.version>
         <httpclient.version>4.5.14</httpclient.version>
         <commons-csv.version>1.14.0</commons-csv.version>
+        <commons-parent.version>90</commons-parent.version>
+        <json.version>20250517</json.version>
+        <testcontainers-bom.version>1.21.3</testcontainers-bom.version>
 
         <jasypt.version>3.0.5</jasypt.version>
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
     </properties> 
     
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>ai.timefold.solver</groupId>
+                <artifactId>timefold-solver-bom</artifactId>
+                <version>${timefold-solver.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-parent</artifactId>
+                <version>${commons-parent.version}</version>
+                <type>pom</type>
+            </dependency>        
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${json.version}</version>
+            </dependency>  
+            <!--
+            <dependency>
+                <groupId>org.tensorflow</groupId>
+                <artifactId>tensorflow-java</artifactId>
+                <version>1.1.0</version>
+                <type>pom</type>
+            </dependency>
+            -->                                   
+            <dependency>
+                <groupId>org.testcontainers</groupId>
+                <artifactId>testcontainers-bom</artifactId>
+                <version>${testcontainers-bom.version}</version> <!-- Check for the latest version -->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>     
+            
+            <dependency>
+                <groupId>io.opentelemetry</groupId>
+                <artifactId>opentelemetry-bom</artifactId>
+                <version>${opentelemetry.pom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- If you need instrumentation-specific dependencies, use this BOM as well -->
+            <dependency>
+                <groupId>io.opentelemetry.instrumentation</groupId>
+                <artifactId>opentelemetry-instrumentation-bom</artifactId>
+                <version>${opentelemetry.instru.pom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>            
+            <dependency>
+                <groupId>com.github.victools</groupId>
+                <artifactId>jsonschema-generator-bom</artifactId>
+                <version>${github.victools.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-community-bom</artifactId>
+                <version>${langchain4j.embeddings.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>dev.langchain4j</groupId>
+                <artifactId>langchain4j-community</artifactId>
+                <version>${langchain4j.embeddings.version}</version>
+                <type>pom</type>
+            </dependency>
+                        
+            <dependency>
+                <groupId>io.projectreactor</groupId>
+                <artifactId>reactor-bom</artifactId>
+                <version>${reactor-bom.version}</version>
+                <type>pom</type>
+            </dependency>     
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-bom</artifactId>
+                <version>${io.jsonwebtoken.version}</version>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.modelmapper.extensions</groupId>
+                <artifactId>modelmapper-extensions</artifactId>
+                <version>${modelmapper.version}</version>
+                <type>pom</type>
+            </dependency>        
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-bom</artifactId>
+                <version>${spring-security-bom.version}</version>
+                <type>pom</type>
+            </dependency>           
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-bom</artifactId>
+                <version>${io.netty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>                          
+            <dependency>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j_jdk17-redis</artifactId>
+                <version>${com.bucket4j.version}</version>
+                <type>pom</type>
+            </dependency>                                                        
+        </dependencies>
+    </dependencyManagement>
+        
     <dependencies>
         <dependency>
             <groupId>com.github.ulisesbocchio</groupId>
@@ -174,9 +302,15 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
+                <!-- tomcat has to be used so that the app can run in netbeans ide and the windows console
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+                -->
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jetty</artifactId>
                 </exclusion>
                 <exclusion>
                     <groupId>ch.qos.logback</groupId>
@@ -184,15 +318,19 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- For JSON serialization -->
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-csv</artifactId>
         </dependency>        
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jetty</artifactId>
-        </dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+        </dependency>    
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+        </dependency>        
                 
         <dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -996,134 +1134,7 @@
             <artifactId>bucket4j_jdk17-redis-common</artifactId>
             <version>${com.bucket4j.version}</version>
         </dependency>
-	</dependencies>  
-    
-    
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.springframework.cloud</groupId>
-				<artifactId>spring-cloud-dependencies</artifactId>
-				<version>${spring-cloud.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.springframework.ai</groupId>
-				<artifactId>spring-ai-bom</artifactId>
-				<version>${spring-ai.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-			</dependency>
-			<dependency>
-				<groupId>ai.timefold.solver</groupId>
-				<artifactId>timefold-solver-bom</artifactId>
-				<version>${timefold-solver.version}</version>
-				<type>pom</type>
-				<scope>import</scope>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-parent</artifactId>
-                <version>90</version>
-                <type>pom</type>
-            </dependency>        
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>20250517</version>
-            </dependency>                               
-            <!--
-            <dependency>
-                <groupId>org.tensorflow</groupId>
-                <artifactId>tensorflow-java</artifactId>
-                <version>1.1.0</version>
-                <type>pom</type>
-            </dependency>
-            -->
-                                    
-            <dependency>
-                <groupId>org.testcontainers</groupId>
-                <artifactId>testcontainers-bom</artifactId>
-                <version>1.21.3</version> <!-- Check for the latest version -->
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>     
-            
-            <dependency>
-                <groupId>io.opentelemetry</groupId>
-                <artifactId>opentelemetry-bom</artifactId>
-                <version>${opentelemetry.pom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!-- If you need instrumentation-specific dependencies, use this BOM as well -->
-            <dependency>
-                <groupId>io.opentelemetry.instrumentation</groupId>
-                <artifactId>opentelemetry-instrumentation-bom</artifactId>
-                <version>${opentelemetry.instru.pom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>            
-            <dependency>
-                <groupId>com.github.victools</groupId>
-                <artifactId>jsonschema-generator-bom</artifactId>
-                <version>${github.victools.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-community-bom</artifactId>
-                <version>${langchain4j.embeddings.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>dev.langchain4j</groupId>
-                <artifactId>langchain4j-community</artifactId>
-                <version>${langchain4j.embeddings.version}</version>
-                <type>pom</type>
-            </dependency>
-                        
-            <dependency>
-                <groupId>io.projectreactor</groupId>
-                <artifactId>reactor-bom</artifactId>
-                <version>${reactor-bom.version}</version>
-                <type>pom</type>
-            </dependency>     
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt-bom</artifactId>
-                <version>${io.jsonwebtoken.version}</version>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.modelmapper.extensions</groupId>
-                <artifactId>modelmapper-extensions</artifactId>
-                <version>${modelmapper.version}</version>
-                <type>pom</type>
-            </dependency>        
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-bom</artifactId>
-                <version>${spring-security-bom.version}</version>
-                <type>pom</type>
-            </dependency>           
-            <dependency>
-                <groupId>io.netty</groupId>
-                <artifactId>netty-bom</artifactId>
-                <version>${io.netty.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>                          
-            <dependency>
-                <groupId>com.bucket4j</groupId>
-                <artifactId>bucket4j_jdk17-redis</artifactId>
-                <version>${com.bucket4j.version}</version>
-                <type>pom</type>
-            </dependency>                                                        
-		</dependencies>
-	</dependencyManagement>
+    </dependencies>  
 
 	<build>
         <defaultGoal>spring-boot:run</defaultGoal>
