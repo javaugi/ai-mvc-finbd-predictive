@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
  * @author david
  * @version $LastChangedRevision $LastChangedDate Last Modified Author: $LastChangedBy
  */
-public class ResourceAccessUtils {
+public class ResourceAccessUtil {
 
-	private static final Logger log = LoggerFactory.getLogger(ResourceAccessUtils.class);
+	private static final Logger log = LoggerFactory.getLogger(ResourceAccessUtil.class);
 
 	private static final String SRC_MAIN_RESOURCE = "src/main/resources";
 
@@ -37,7 +37,7 @@ public class ResourceAccessUtils {
 		}
 	}
 
-	public ResourceAccessUtils() {
+	public ResourceAccessUtil() {
 	}
 
 	public static File getResourceFile(String filename) {
@@ -45,7 +45,7 @@ public class ResourceAccessUtils {
 
         try {
             String res = File.separator + filename;
-            URL resource = ResourceAccessUtils.class.getResource(filename);
+            URL resource = ResourceAccessUtil.class.getResource(filename);
             log.debug("File {} Url Created {}", res, resource);
 			file = Paths.get(resource.toURI()).toFile();
 		}
@@ -80,7 +80,7 @@ public class ResourceAccessUtils {
         StringBuilder sb = new StringBuilder();
 
         try {
-            InputStream inputStream = ResourceAccessUtils.class.getResourceAsStream(filename);
+            InputStream inputStream = ResourceAccessUtil.class.getResourceAsStream(filename);
             sb.append(new String(inputStream.readAllBytes()));
         } catch (IOException ex) {
             log.error("Error getResourceFile filename {}", filename, ex);

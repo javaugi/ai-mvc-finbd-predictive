@@ -8,7 +8,7 @@ import com.jvidia.aimlbda.clients.AuditLogClient;
 import com.jvidia.aimlbda.clients.TestUserClient;
 import com.jvidia.aimlbda.clients.UserInfoClient;
 import com.jvidia.aimlbda.config.DatabaseProperties;
-import com.jvidia.aimlbda.utils.ResourceAccessUtils;
+import com.jvidia.aimlbda.utils.ResourceAccessUtil;
 import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -102,7 +102,7 @@ public class DataInitializer implements ApplicationRunner {
     }
 
     private String getDdlSql(String tableName) {
-        return ResourceAccessUtils.getResourceContent(dbProps.getDdlSchemaDir() + tableName + ".sql");
+        return ResourceAccessUtil.getResourceContent(dbProps.getDdlSchemaDir() + tableName + ".sql");
     }
 
     private void addTableBySql(String sql) {

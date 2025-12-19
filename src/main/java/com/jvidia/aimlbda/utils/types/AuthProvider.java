@@ -7,5 +7,6 @@ package com.jvidia.aimlbda.utils.types;
 public enum AuthProvider {
     local,
     google,
-    github
+    github,
+    epicfhir
 }

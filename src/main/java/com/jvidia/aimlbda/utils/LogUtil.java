@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.MapPropertySource;
 
 @Slf4j
-public class LogUtils {
+public class LogUtil {
 
     public static void logBeans(String[] beans) {
         log.debug("\n## MyApplication START LOGGING {} ");

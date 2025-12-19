@@ -1,4 +1,4 @@
-package com.jvidia.aimlbda.utils;
+package com.jvidia.aimlbda.security.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,7 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Optional;
 
-public class CookieUtils {
+public class CookieUtil {
     // Inject the ObjectMapper bean (e.g., via constructor injection in a service/component)
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

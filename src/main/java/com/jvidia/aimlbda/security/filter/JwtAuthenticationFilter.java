@@ -29,11 +29,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final UserDetailsService userDetailsService;
     private final List<String> excludedPaths = List.of(
             "/public/",
+            "/favicon.ico",
             "/auth/login",
             "/auth/signup",
             "/auth/logout",
             "/actuator",
             "/error",
+            "/oauth2",
+            "/login/**",
             "/h2-console",
             "/favicon.ico",
             "/webjars",
@@ -57,9 +60,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean shouldNotFilterForSessionAuth(HttpServletRequest request) {
         String path = request.getRequestURI();
-        log.info("shouldNotFilterForSessionAuth path={}", path);
-        return excludedPaths.stream().anyMatch(path::startsWith)
+        log.debug("shouldNotFilterForSessionAuth path={}", path);
+        boolean shouldNotFilter = excludedPaths.stream().anyMatch(path::startsWith)
                 || hasOAuth2SessionAuthentication();
+        log.debug("shouldNotFilterForSessionAuth path={}, shouldNotFilter={}", path, shouldNotFilter);
+        return shouldNotFilter;
     }
 
     private boolean hasOAuth2SessionAuthentication() {
@@ -68,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         boolean hasOAuth2SessionAuth = existingAuth != null
                 && existingAuth.isAuthenticated()
                 && existingAuth.getPrincipal() instanceof OAuth2User;
-        log.info("hasOAuth2SessionAuthentication existingAuth={}", existingAuth);
+        log.debug("hasOAuth2SessionAuthentication existingAuth={}", existingAuth);
         return hasOAuth2SessionAuth;
     }
 
@@ -76,6 +81,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
             FilterChain filterChain) throws ServletException, IOException {
         // Skip JWT processing for session-based OAuth2 endpoints
+        log.debug("doFilterInternal shouldNotFilter={}", shouldNotFilterForSessionAuth(request));
         if (shouldNotFilterForSessionAuth(request)) {
             filterChain.doFilter(request, response);
             return;

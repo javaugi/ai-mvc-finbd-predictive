@@ -5,8 +5,8 @@ import com.jvidia.aimlbda.entity.UserRole;
 import com.jvidia.aimlbda.security.oauth2.HttpCookieOAuth2AutherizationRequestRepository;
 import com.jvidia.aimlbda.service.JwtTokenService;
 import com.jvidia.aimlbda.service.UserInfoService;
-import com.jvidia.aimlbda.utils.CookieUtils;
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.security.utils.CookieUtil;
+import com.jvidia.aimlbda.utils.LogUtil;
 import com.jvidia.aimlbda.utils.types.RoleType;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -48,7 +48,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         request.getSession().setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
         OAuth2User authUser = (OAuth2User) authentication.getPrincipal();
-        LogUtils.logMap("OAuth2LoginSuccessHandler.onAuthenticationSuccess", authUser.getAttributes());
+        LogUtil.logMap("OAuth2LoginSuccessHandler.onAuthenticationSuccess", authUser.getAttributes());
 
         String email = authUser.getAttribute("email");
         UserInfo savedUser = this.userInfoService.findByEmail(email).orElse(null);
@@ -75,7 +75,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     @Override
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Optional<String> redirectUri = CookieUtils.getCookie(request, REDIRECT_PARAM_COOKIE_NAME)
+        Optional<String> redirectUri = CookieUtil.getCookie(request, REDIRECT_PARAM_COOKIE_NAME)
                 .map(Cookie::getValue);
         log.debug("determineTargetUrl redirectUri {} ", (redirectUri.isPresent() ? redirectUri.get() : ""));
 

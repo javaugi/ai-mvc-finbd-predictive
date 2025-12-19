@@ -14,6 +14,11 @@ const Login = () => {
         window.location.href = `http://localhost:8088/oauth2/authorization/${provider}?redirect_uri=http://localhost:3000/dashboard`;
     };
 
+    const handleOAuthLoginEpic = (provider) => {
+        // Open OAuth in same window
+        window.location.href = `http://localhost:8088/oauth2/authorization/${provider}`;
+    };
+
     const handleInternalLogin = async (e) => {
         e.preventDefault();
         try {
@@ -51,8 +56,15 @@ const Login = () => {
                             >
                             💻 Login with GitHub
                         </button>
+
+                        <button 
+                            className="oauth-btn epicfhir-btn"
+                            onClick={() => handleOAuthLoginEpic('epicfhir')}
+                            >
+                            💻 Login with Epis on Fhir
+                        </button>
                     </div>
-            
+
                     <hr style={{margin: '1.5rem 0'}} />
             
                     <form onSubmit={handleInternalLogin}>

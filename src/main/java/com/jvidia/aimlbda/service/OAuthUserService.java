@@ -4,7 +4,7 @@ import com.jvidia.aimlbda.entity.Role;
 import com.jvidia.aimlbda.entity.UserInfo;
 import com.jvidia.aimlbda.security.oauth2.user.OAuth2UserFactory;
 import com.jvidia.aimlbda.security.oauth2.user.OAuth2UserInfo;
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.LogUtil;
 import com.jvidia.aimlbda.utils.types.AuthProvider;
 import com.jvidia.aimlbda.utils.types.RoleType;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -48,7 +48,7 @@ public class OAuthUserService implements OAuth2UserService<OAuth2UserRequest, OA
         OAuth2UserService<OAuth2UserRequest, OAuth2User> defaultOauthUserService = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = defaultOauthUserService.loadUser(userRequest);
         log.debug("OAuthUserService.loaduser oAuth2User name {} authorities {} ", oAuth2User.getName(), oAuth2User.getAuthorities());
-        LogUtils.logMap("OAuthUserService.loadUser", oAuth2User.getAttributes());
+        LogUtil.logMap("OAuthUserService.loadUser", oAuth2User.getAttributes());
 
         String provider = userRequest.getClientRegistration().getRegistrationId();
         // Only override GitHub behavior

@@ -34,6 +34,11 @@ function Login() {
     //console.log("Login with GitHub");
   };
 
+  const handleEpicFhirLogin = () => {
+    window.location.href = `http://localhost:8088/oauth2/authorization/epicfhir?redirect_uri=http://localhost:5173`;
+    //console.log("Login with Epic on Fhir");
+  };
+
   return (
     <div className="App">
       <form onSubmit={handleLogin}>
@@ -68,6 +73,9 @@ function Login() {
         </button>
         <button className="social-button" onClick={handleGithubLogin}>
           Login with GitHub
+        </button>
+        <button className="social-button" onClick={handleEpicFhirLogin}>
+          Login with Epic on Fhir
         </button>
       </div>
     </div>

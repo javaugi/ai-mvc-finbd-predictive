@@ -11,7 +11,9 @@ import com.jvidia.aimlbda.service.TestUserService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -25,6 +27,12 @@ public class UserServiceIntegrationTest extends MyApplicationBaseTests {
 
     @Autowired
     private TestUserService testUserService;
+
+    @BeforeEach
+    public void setUp() {
+        // Reset mock to clear previous calls
+        reset(mockRepository); // Clear calls from setup/initialization
+    }
 
     @Test
     void testUserCount() {

@@ -1,6 +1,6 @@
 package com.jvidia.aimlbda.service;
 
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.LogUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -86,7 +86,7 @@ public class JwtTokenService {
     }
 
     public String resolveToken(HttpServletRequest req) {
-        LogUtils.logRequest("JwtToenService.resolveToken", req);
+        LogUtil.logRequest("JwtToenService.resolveToken", req);
         // 1. Check Authorization header first
         String bearerToken = req.getHeader("Authorization");
         log.debug("resolveToken bearerToken {} ", bearerToken);

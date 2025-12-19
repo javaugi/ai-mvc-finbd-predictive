@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
+@RequestMapping("/api/audit")
 @RequiredArgsConstructor
 public class WebMvcController {
     private final AuditLogRepository auditLogRepository;
@@ -73,17 +74,10 @@ public class WebMvcController {
     }
  
     @GetMapping("/{id}")
-    public ResponseEntity<AuditLog> getAuditLogById(@PathVariable Long id) {
-        Optional<AuditLog> opt = auditLogRepository.findById(id);
-
-        //*
-        if (opt.isPresent()) {
-            return ResponseEntity.ok(opt.get());
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found if the product doesn't exist
-        }
-        // */
-        //return ResponseEntity.ok(productOptional.orElse(null));
+    public ResponseEntity<AuditLog> getAuditLog(@PathVariable Long id, HttpServletRequest request) {
+        return auditLogRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
     
     @GetMapping("/al")

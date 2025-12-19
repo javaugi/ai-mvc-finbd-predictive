@@ -10,7 +10,7 @@ import com.jvidia.aimlbda.dto.aiml.OllamaChatResponse;
 import com.jvidia.aimlbda.dto.aiml.OllamaEmbeddingResponse;
 import com.jvidia.aimlbda.dto.aiml.OllamaMessage;
 import com.jvidia.aimlbda.dto.aiml.OllamaRequest;
-import com.jvidia.aimlbda.utils.EmbeddingUtils;
+import com.jvidia.aimlbda.utils.EmbeddingUtil;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.embedding.EmbeddingRequest;
@@ -43,7 +43,7 @@ public class OllamaService {
             .map(response -> {
                 EmbeddingResult result = new EmbeddingResult();
                 result.setModel(properties.getEmbeddingModel());
-            result.setData(EmbeddingUtils.convertDoublesToEmbeddings(response.getEmbedding()));
+            result.setData(EmbeddingUtil.convertDoublesToEmbeddings(response.getEmbedding()));
                 return result;
             });
     }
@@ -65,7 +65,7 @@ public class OllamaService {
             .map(response -> {
                 ChatCompletionResult result = new ChatCompletionResult();
                 result.setModel(properties.getModel());
-            result.setChoices(EmbeddingUtils.convertToChatChoices(response));
+            result.setChoices(EmbeddingUtil.convertToChatChoices(response));
                 return result;
             });
     }

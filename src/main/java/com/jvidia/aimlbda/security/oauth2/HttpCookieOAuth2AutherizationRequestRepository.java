@@ -1,6 +1,6 @@
 package com.jvidia.aimlbda.security.oauth2;
 
-import com.jvidia.aimlbda.utils.CookieUtils;
+import com.jvidia.aimlbda.security.utils.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Configuration;
@@ -16,23 +16,23 @@ public class HttpCookieOAuth2AutherizationRequestRepository implements Authoriza
 
     @Override
     public OAuth2AuthorizationRequest loadAuthorizationRequest(HttpServletRequest request) {
-        return CookieUtils.getCookie(request, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME)
-                .map(cookie -> CookieUtils.deserialize(cookie, OAuth2AuthorizationRequest.class))
+        return CookieUtil.getCookie(request, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME)
+                .map(cookie -> CookieUtil.deserialize(cookie, OAuth2AuthorizationRequest.class))
                 .orElse(null);
     }
 
     @Override
     public void saveAuthorizationRequest(OAuth2AuthorizationRequest authorizationRequest, HttpServletRequest request, HttpServletResponse response) {
         if(authorizationRequest == null) {
-            CookieUtils.deleteCookie(request, response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME);
-            CookieUtils.deleteCookie(request, response, REDIRECT_PARAM_COOKIE_NAME);
+            CookieUtil.deleteCookie(request, response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME);
+            CookieUtil.deleteCookie(request, response, REDIRECT_PARAM_COOKIE_NAME);
             return;
         }
 
-        CookieUtils.setCookie(response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME, CookieUtils.searlizeCookie(authorizationRequest), cookieMaxAgeInSeconds);
+        CookieUtil.setCookie(response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME, CookieUtil.searlizeCookie(authorizationRequest), cookieMaxAgeInSeconds);
         String redirectUriAfterLogin =request.getParameter(REDIRECT_PARAM_COOKIE_NAME);
         if(redirectUriAfterLogin != null) {
-            CookieUtils.setCookie(response, REDIRECT_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieMaxAgeInSeconds);
+            CookieUtil.setCookie(response, REDIRECT_PARAM_COOKIE_NAME, redirectUriAfterLogin, cookieMaxAgeInSeconds);
         }
     }
 
@@ -42,7 +42,7 @@ public class HttpCookieOAuth2AutherizationRequestRepository implements Authoriza
     }
 
     public void removeAuthorizationRequestCookie(HttpServletRequest request, HttpServletResponse response) {
-        CookieUtils.deleteCookie(request, response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME);
-        CookieUtils.deleteCookie(request, response, REDIRECT_PARAM_COOKIE_NAME);
+        CookieUtil.deleteCookie(request, response, OAUTH2_AUTHERIZATION_REQUEST_COOKIE_NAME);
+        CookieUtil.deleteCookie(request, response, REDIRECT_PARAM_COOKIE_NAME);
     }
 }

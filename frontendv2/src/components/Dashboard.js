@@ -96,6 +96,7 @@ export default function Dashboard() {
             setLoading(false);
         }
     };
+
     const handleLogout = async () => {
         try {
             await axios.post('/auth/logout', {}, {
@@ -105,7 +106,8 @@ export default function Dashboard() {
             console.error('Logout error:', error);
         } finally {
             setUser(null);
-            navigate('/login?logout=success');
+            //navigate('/login?logout=success');
+            window.location.href = 'http://localhost:3000/login?logout=success';
         }
     };
 

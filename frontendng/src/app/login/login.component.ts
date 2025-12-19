@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     }
 
     // Method for OAuth2 redirects (Gmail, GitHub) - remains the same
-    loginWithProvider(provider: 'google' | 'github'): void {
+    loginWithProvider(provider: 'google' | 'github' | 'epicfhir'): void {
         this.authService.initiateLogin(provider);
     }
 

@@ -12,22 +12,34 @@ import com.jvidia.aimlbda.service.TestUserService;
 import java.util.Arrays;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 public class TestUserServiceTest extends MyApplicationBaseTests {
     @MockitoBean // Creates a mock object of the repository
     private TestUserRepository mockRepository;
 
-    @InjectMocks // Injects the mock into the service instance
+    // Injects the mock into the service instance
+    //@InjectMocks
+    @Autowired
     private TestUserService testUserService;
+
+    @BeforeEach
+    public void setUp() {
+        // Reset mock to clear previous calls
+        //reset(mockRepository); // Clear calls from setup/initialization
+    }
 
     @Test
     void testUserCount() {
+        // Reset mock to clear previous calls
+        reset(mockRepository); // Clear calls from setup/initialization
         // Arrange: Define the behavior of the mocked dependency
         when(mockRepository.count()).thenReturn(5L);
 

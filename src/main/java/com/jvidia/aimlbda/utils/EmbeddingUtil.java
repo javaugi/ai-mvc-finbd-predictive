@@ -12,7 +12,7 @@ import com.theokanning.openai.embedding.EmbeddingResult;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmbeddingUtils {
+public class EmbeddingUtil {
     public static List<Embedding> convertDoublesToEmbeddings(List<Double> doubleList) {
         Embedding embedding = new Embedding();
         embedding.setEmbedding(doubleList);

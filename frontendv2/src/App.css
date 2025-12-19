@@ -72,6 +72,10 @@ body {
     background: #333;
 }
 
+.epicfhir-btn {
+    background: #3a9968;
+}
+
 .internal-btn {
     background: #007bff;
 }

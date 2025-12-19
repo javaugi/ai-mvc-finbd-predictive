@@ -17,7 +17,6 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +59,7 @@ public class TestUserController {
         return ResponseEntity.notFound().build();
     }
 
-    @GetMapping("/{firstName}")
+    @GetMapping("/user/{firstName}")
     public ResponseEntity<Collection<TestUser>> getUsersByFirstName(@PathVariable String firstName) {
         return ResponseEntity.ok(this.testUserService.getByFirstName(firstName));
     }
@@ -68,8 +67,8 @@ public class TestUserController {
     @PostMapping
     public ResponseEntity<TestUser> create(@RequestBody TestUser testUser) {
         testUser = testUserService.save(testUser);
-        ResponseEntity.status(HttpStatus.CREATED).body(testUser);
-        return ResponseEntity.created(URI.create("/api/testonly/" + testUser.getId())).body(testUser);
+        return ResponseEntity.status(HttpStatus.CREATED).body(testUser);
+        //return ResponseEntity.created(URI.create("/api/testonly/" + testUser.getId())).body(testUser);
     }
 
     @PutMapping
@@ -80,49 +79,44 @@ public class TestUserController {
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         Optional<TestUser> opt = testUserService.getById(id);
 
         if (opt.isPresent()) {
             testUserService.deleteById(id); // Use deleteById for deleting by ID
-            ResponseEntity.noContent().build();
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content for
-            // successful deletion
+            return ResponseEntity.noContent().build();
         } else {
-            ResponseEntity.notFound().build();
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404 Not Found if the
-            // product doesn't exist
+            return ResponseEntity.notFound().build();
         }
     }
 
     // the following are procedure related code
-
-    @GetMapping("/jdbc/{city}")
+    @GetMapping("/user/jdbc/{city}")
     public List<TestUserDTO> getUsersByCityJdbc(@PathVariable String city,
             @RequestParam(defaultValue = "0") Integer minAge) {
         return userServiceJdbc.findUsersByCity(city, minAge);
     }
 
-    @GetMapping("/entitymanager/{city}")
+    @GetMapping("/user/entitymanager/{city}")
     public List<TestUserDTO> getUsersByCityEntityManager(@PathVariable String city,
             @RequestParam(defaultValue = "0") Integer minAge) {
         return testUServiceEntityManager.findUsersByCityAsDTO(city, minAge);
     }
 
-    @GetMapping("/procedure1/{city}")
+    @GetMapping("/user/procedure1/{city}")
     public List<TestUserProjection> findUsersByCity(@PathVariable String city,
             @RequestParam(defaultValue = "0") Integer minAge) {
         return testUserRepository.findUsersByCity(city, minAge);
     }
 
-    @GetMapping("/procedure2/{city}")
+    @GetMapping("/user/procedure2/{city}")
     public List<Object[]> findUsersByCityDirect(@PathVariable String city,
             @RequestParam(defaultValue = "0") Integer minAge) {
         return testUserRepository.findUsersByCityDirect(city, minAge);
     }
 
-    @GetMapping("/procedure3/{userId}")
+    @GetMapping("/user/procedure3/{userId}")
     public Object[] updateUserAge(@PathVariable Long userId,
             @RequestParam(defaultValue = "0") Integer minAge) {
         return testUserRepository.updateUserAge(userId, minAge);

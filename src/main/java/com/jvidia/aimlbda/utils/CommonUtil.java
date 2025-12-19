@@ -9,14 +9,17 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import java.text.ParseException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.time.DateUtils;
 
-/**
- *
- * @author javau
- */
-public class CommonUtils {
+@Slf4j
+public class CommonUtil {
     
     public static String listToString(List<String> list) {
         return listToString(list, ",");
@@ -61,5 +64,24 @@ public class CommonUtils {
             java.lang.reflect.Type mapType = new TypeToken<Map<String, Object>>(){}.getType();
             return gson.fromJson(json, mapType);
         }
-    }    
+    }
+
+    public static Date parseDate(String strDate, String pattern) {
+        try {
+            DateUtils.parseDate(strDate, pattern);
+        } catch (ParseException ex) {
+            log.error("Error parseDate {}", strDate, pattern);
+        }
+        return new Date();
+    }
+
+    public static LocalDate parseLocalDate(String strDate, String pattern) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+            LocalDate.parse(strDate, formatter);
+        } catch (Exception ex) {
+            log.error("Error parseDate {}", strDate, pattern);
+        }
+        return LocalDate.now();
+    }
 }

@@ -1,6 +1,6 @@
 package com.jvidia.aimlbda;
 
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.LogUtil;
 import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationRunner;
@@ -39,7 +39,7 @@ public class MyApplication {
         return args -> {
             String[] beans = ctx.getBeanDefinitionNames();
             log.info("Beans provided by Spring Boot {} count {}", SpringBootVersion.getVersion(), beans.length);
-            LogUtils.logBeans(beans);
+            LogUtil.logBeans(beans);
         };
     }    
 }

@@ -1,6 +1,6 @@
 package com.jvidia.aimlbda.security.oauth2.user;
 
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.LogUtil;
 import com.jvidia.aimlbda.utils.types.AuthProvider;
 import java.util.HashMap;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -18,12 +18,14 @@ public class OAuth2UserFactory {
                 || registrationId.equalsIgnoreCase(AuthProvider.local.toString())) {
             userAttributes.put("username", userAttributes.get("login"));
         }
-        LogUtils.logMap("OAuth2UserFactory.getOAuth2User", userAttributes);
+        LogUtil.logMap("OAuth2UserFactory.getOAuth2User", userAttributes);
 
         if (registrationId.equalsIgnoreCase(AuthProvider.google.toString())) {
             return new GoogleOAuth2UserInfo(userAttributes);
         } else if (registrationId.equalsIgnoreCase((AuthProvider.github.toString()))) {
             return new GithubOAuth2UserInfo(userAttributes);
+        } else if (registrationId.equalsIgnoreCase((AuthProvider.epicfhir.toString()))) {
+            return new EpicFhirOAuth2UserInfo(userAttributes);
         } else if (registrationId.equalsIgnoreCase((AuthProvider.local.toString()))) {
             return new InternalOAuth2UserInfo(userAttributes);
         } else {

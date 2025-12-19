@@ -1,6 +1,6 @@
 package com.jvidia.aimlbda.security;
 
-import com.jvidia.aimlbda.utils.LogUtils;
+import com.jvidia.aimlbda.utils.LogUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -26,7 +26,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response,
             AuthenticationException authException) throws IOException, ServletException {
-        LogUtils.logRequest("RestAuthenticationEntryPoint.commence", request);
+        LogUtil.logRequest("RestAuthenticationEntryPoint.commence", request);
         resolver.resolveException(request, response, null, authException);
     }
 }

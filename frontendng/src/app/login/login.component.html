@@ -12,6 +12,10 @@
         Login with GitHub
     </button>
 
+    <button (click)="loginWithProvider('epicfhir')">
+        <img src="github-icon.png" alt="EpicFhir">
+        Login with Epic on Fhir
+    </button>
     <hr>
 
     <form [formGroup]="loginForm" (ngSubmit)="handleInternalLogin()">
