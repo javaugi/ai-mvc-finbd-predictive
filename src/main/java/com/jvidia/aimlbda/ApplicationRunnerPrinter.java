@@ -4,6 +4,7 @@
  */
 package com.jvidia.aimlbda;
 
+import com.jvidia.aimlbda.actuator.openapi.InstanceIdentifier;
 import com.jvidia.aimlbda.config.DatabaseProperties;
 import com.jvidia.aimlbda.utils.LogUtil;
 import com.jvidia.aimlbda.utils.types.AuthProvider;
@@ -29,13 +30,20 @@ public class ApplicationRunnerPrinter implements ApplicationRunner {
     private Environment env;
     @Autowired
     protected DatabaseProperties dbProps;
+    @Autowired
+    protected InstanceIdentifier instanceIdentifier;
 
     @Bean
     public CommandLineRunner verify(ClientRegistrationRepository repo) {
         return args -> {
             for (AuthProvider ap : AuthProvider.values()) {
-                ClientRegistration epic = repo.findByRegistrationId(ap.name());
-                log.debug("ApplicationRuunerPrinter AuthProvider={} ClientRegistration={}", ap.name(), ((epic != null) ? epic.getClientId() : ""));
+                ClientRegistration reg = repo.findByRegistrationId(ap.name());
+                String clientId = (reg != null) ? reg.getClientId() : "";
+                String regId = (reg != null) ? reg.getRegistrationId() : "";
+                String clientName = (reg != null) ? reg.getClientName() : "";
+                String redirectUrl = (reg != null) ? reg.getRedirectUri() : "";
+                log.debug("ApplicationRuunerPrinter AuthProvider={} \n Reg clientId={},registrationId={}, clientName={},redirecturl={}",
+                        ap.name(), clientId, regId, clientName, redirectUrl);
             }
         };
     }
@@ -57,6 +65,7 @@ public class ApplicationRunnerPrinter implements ApplicationRunner {
                     }
                 });
 
-        log.debug("Application is ready: \n {}", dbProps);
+        log.debug("Application is ready: \n dbProps {}", dbProps);
+        log.debug("Application is ready: \n instanceIdentifier {}", instanceIdentifier);
     }
 }

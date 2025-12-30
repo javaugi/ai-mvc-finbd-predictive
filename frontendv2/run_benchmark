@@ -1,0 +1,5 @@
+#!/bin/sh
+reset
+echo "Running k6 run benchmark.js"
+k6 run benchmark.js
+

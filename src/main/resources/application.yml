@@ -6,6 +6,18 @@ server:
       cookie:
         same-site: none
         secure: false
+  ssl:
+    enabled: false
+  # Important for OAuth2 redirect URIs
+  forward-headers-strategy: framework
+---
+# Custom properties for SMART on FHIR
+smart:
+  fhir:
+    server-url: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4
+    client-id: ${EPIC_CLIENT_ID}
+    redirect-uri: http://localhost:8088/login/oauth2/code/epicfhir
+---
 spring:
   web:
     base-url: http://localhost:8088
@@ -55,13 +67,14 @@ spring:
             authorization-grant-type: authorization_code
             client-authentication-method: none
             #redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            redirect-uri: "https://contractile-unruefully-madilynn.ngrok-free.dev/login/oauth2/code/{registrationId}"
+            redirect-uri: "https://contractile-unruefully-madilynn.ngrok-free.dev/login/oauth2/code/epicfhir"
             #client-authentication-method: client_secret_basic
             #scope: openid,fhirUser,launch/patient,patient/*.read
             scope:
-            #  - openid
+              - openid
               - fhirUser
               - patient/*.read
+            client-name: Epic FHIR
             #  - launch/patient
             # PKCE is automatically handled by Spring Security 5.3+                
         provider:
@@ -93,10 +106,13 @@ spring:
           epicfhir:
             authorization-uri: https://fhir.epic.com/interconnect-fhir-oauth/oauth2/authorize
             token-uri: https://fhir.epic.com/interconnect-fhir-oauth/oauth2/token
-            #user-info-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/metadata
-            user-info-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient
-            base-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/
-            #user-name-attribute: iss            
+            # user-info-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/metadata
+            # user-info-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/Patient
+            user-info-uri: https://fhir.epic.com/interconnect-fhir-oauth/oauth2/userinfo
+            jwk-set-uri: https://fhir.epic.com/interconnect-fhir-oauth/oauth2/certs
+            # issuer-uri: https://fhir.epic.com/interconnect-fhir-oauth
+            base-uri: https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4
+            user-name-attribute: sub   
 ---
 #
 #🧩 What Each Placeholder Means

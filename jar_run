@@ -3,4 +3,4 @@ echo "Running mvn clean package"
 mvn --version
 mvn clean package
 reset
-java -jar target/backend.jar
+java -jar target/predica.jar

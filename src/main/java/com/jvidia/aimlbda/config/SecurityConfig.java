@@ -8,22 +8,22 @@ import com.jvidia.aimlbda.repository.RoleRepository;
 import com.jvidia.aimlbda.security.RestAuthenticationEntryPoint;
 import com.jvidia.aimlbda.security.filter.JwtAuthenticationFilter;
 import com.jvidia.aimlbda.security.handler.CustomAccessDeniedHandler;
-import com.jvidia.aimlbda.security.handler.LoginLogoutRedirectHandler;
+import com.jvidia.aimlbda.security.utils.RedirectUtils;
 import com.jvidia.aimlbda.security.handler.OAuth2LoginSuccessHandler;
 import com.jvidia.aimlbda.security.oauth2.HttpCookieOAuth2AutherizationRequestRepository;
 import com.jvidia.aimlbda.security.resolver.DelegatingAuthorizationRequestResolver;
+import com.jvidia.aimlbda.security.utils.PkceUtil;
 import com.jvidia.aimlbda.service.JwtTokenService;
 import com.jvidia.aimlbda.service.OAuthUserService;
 import com.jvidia.aimlbda.service.RoleService;
 import com.jvidia.aimlbda.service.UserInfoService;
 import com.jvidia.aimlbda.utils.LogUtil;
+import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,13 +34,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.client.web.DefaultOAuth2AuthorizationRequestResolver;
@@ -48,6 +45,7 @@ import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequest
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestRedirectFilter;
 import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames;
+import org.springframework.security.oauth2.core.endpoint.PkceParameterNames;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
@@ -72,6 +70,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Value("${smart.fhir.server-url}")
+    private String fhirServerUrl;
+
     private final String[] PERMIT_ALL_PATHS = List.of("/", "/login/**",
             "/public/**", "/favicon.ico", "/webjars", "/webjars/**",
             "/auth/login", "/auth/signup", "/auth/logout", "/oauth2/**",
@@ -88,7 +89,8 @@ public class SecurityConfig {
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
     private final UserDetailsService userDetailsService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    private final LoginLogoutRedirectHandler redirectHandler;
+    private final RedirectUtils redirectUtils;
+    private final PkceUtil pkceUtil;
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
@@ -124,7 +126,7 @@ public class SecurityConfig {
                     String referer = request.getHeader("Referer");
             String origin = request.getHeader("Origin");
             LogUtil.logRequest("SecurityConfig", request);
-            String redirectUrl = redirectHandler.determineRedirectUrl(referer, origin);
+            String redirectUrl = redirectUtils.determineRedirectUrl(referer, origin);
                     response.sendRedirect(redirectUrl);
                 })
                 .invalidateHttpSession(true)
@@ -143,16 +145,6 @@ public class SecurityConfig {
         // This is necessary to show the H2 console in a frame
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         return http.build();
-    }
-
-    private OAuth2AuthorizationRequestResolver getDelegatingResolver(ClientRegistrationRepository repo) {
-        OAuth2AuthorizationRequestResolver epicResolver = epicPkceResolver(repo);
-        OAuth2AuthorizationRequestResolver defaultResolver
-                = new DefaultOAuth2AuthorizationRequestResolver(repo, "/oauth2/authorization");
-        OAuth2AuthorizationRequestResolver delegatingResolver
-                = new DelegatingAuthorizationRequestResolver(epicResolver, defaultResolver);
-        log.debug("securityFilterChain delegatingResolver={}", delegatingResolver);
-        return delegatingResolver;
     }
 
     //CSRF (Cross-Site Request Forgery):
@@ -207,6 +199,45 @@ public class SecurityConfig {
     }
 
     /*
+    @Bean
+    public OAuth2UserService<OAuth2UserRequest, OAuth2User> oAuth2UserService() {
+        log.debug("Creating OAuth2UserService...");
+
+        DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
+        return userRequest -> {
+            log.debug("Loading user for registration: {}", userRequest.getClientRegistration().getRegistrationId());
+            try {
+                OAuth2User user = delegate.loadUser(userRequest);
+                log.debug("User loaded successfully: {}", user.getName());
+                log.debug("User attributes: {}", user.getAttributes());
+
+                return user;
+            } catch (OAuth2AuthenticationException e) {
+                log.error("Error loading OAuth2 user: {}", e.getMessage(), e);
+                throw e;
+            } catch (Exception e) {
+                log.error("Unexpected error loading OAuth2 user: {}", e.getMessage(), e);
+                throw new OAuth2AuthenticationException(
+                        new OAuth2Error("user_load_error", e.getMessage(), null),
+                        e
+                );
+            }
+        };
+    }
+    // */
+    public OAuth2AuthorizationRequestResolver getDelegatingResolver(ClientRegistrationRepository repo) {
+        OAuth2AuthorizationRequestResolver epicResolver = epicPkceResolver(repo);
+        log.debug("securityFilterChain epicResolver={}", epicResolver);
+        OAuth2AuthorizationRequestResolver defaultResolver
+                = new DefaultOAuth2AuthorizationRequestResolver(repo, "/oauth2/authorization");
+        log.debug("securityFilterChain defaultResolver={}", defaultResolver);
+        OAuth2AuthorizationRequestResolver delegatingResolver
+                = new DelegatingAuthorizationRequestResolver(epicResolver, defaultResolver);
+        log.debug("securityFilterChain delegatingResolver={}", delegatingResolver);
+        return delegatingResolver;
+    }
+
+    /*
     ✅ This automatically:
         Generates code_verifier
         Hashes it to code_challenge
@@ -225,21 +256,31 @@ public class SecurityConfig {
             String registrationId = (String) builder.build().getAttribute(OAuth2ParameterNames.REGISTRATION_ID);
             log.debug("epicPkceResolver registrationId={}", registrationId);
             if ("epicfhir".equals(registrationId)) {
-                // ✅ PKCE required by Epic SMART on FHIR
-                OAuth2AuthorizationRequestCustomizers.withPkce()
-                        .accept(builder);
-
                 // ✅ Epic-required aud parameter
-                /*
-                builder.additionalParameters(params
-                        -> params.put("aud", "https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/")
-                ).additionalParameters(params
-                        -> params.put("iss", "https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/")
-                );
-                // */
-                builder.additionalParameters(params
-                        -> params.put("aud", "https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/")
-                );
+                // Generate PKCE code verifier and challenge
+                try {
+                    String codeVerifier = pkceUtil.generateCodeVerifier();
+                    String codeChallenge = pkceUtil.generateCodeChallenge(codeVerifier);
+                    log.debug("setAuthorizationRequestCustomizer codeVerifier={}, codeChallenge={}", codeVerifier, codeChallenge);
+
+                    // Add PKCE parameters to authorization request
+                    builder.attributes(attrs -> {
+                        attrs.put(PkceParameterNames.CODE_VERIFIER, codeVerifier);
+                        attrs.put("registration_id", "epicfhir");
+                    }).additionalParameters(params -> {
+                        params.put(PkceParameterNames.CODE_CHALLENGE, codeChallenge);
+                        params.put(PkceParameterNames.CODE_CHALLENGE_METHOD, "S256");
+                        params.put("aud", fhirServerUrl);
+                        // SMART on FHIR specific parameters
+                        params.put("response_type", "code");
+                        //params.put("launch", "");
+                    });
+                } catch (NoSuchAlgorithmException ex) {
+                    log.error("Error setAuthorizationRequestCustomizer registrationId={}", registrationId, ex);
+                }
+
+                // ✅ PKCE required by Epic SMART on FHIR
+                OAuth2AuthorizationRequestCustomizers.withPkce().accept(builder);
             }
         });
 
@@ -249,47 +290,13 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2AuthorizationRequestResolver defaultResolver(ClientRegistrationRepository repo) {
-
+        log.debug("defaultResolver ClientRegistrationRepository={}", repo);
         return new DefaultOAuth2AuthorizationRequestResolver(
                 repo,
                 "/oauth2/authorization"
         );
     }
 
-    public static List<String> clients = Arrays.asList("google", "github", "epic", "auth0", "keycloak", "facebook");
-    public static String CLIENT_PROPERTY_KEY
-            = "spring.security.oauth2.client.registration.";
-    @Autowired
-    private Environment env;
-
-    //@Bean - If we’re not working with a Spring Boot application, we’ll need to define a ClientRegistrationRepository bean 
-    public ClientRegistrationRepository clientRegistrationRepository() {
-        List<ClientRegistration> registrations = clients.stream()
-                .map(c -> getRegistration(c))
-                .filter(registration -> registration != null)
-                .collect(Collectors.toList());
-
-        return new InMemoryClientRegistrationRepository(registrations);
-    }
-
-    private ClientRegistration getRegistration(String client) {
-        String clientId = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-id");
-        if (clientId == null) {
-            return null;
-        }
-
-        String clientSecret = env.getProperty(CLIENT_PROPERTY_KEY + client + ".client-secret");
-
-        if (client.equals("google")) {
-            return CommonOAuth2Provider.GOOGLE.getBuilder(client)
-                    .clientId(clientId).clientSecret(clientSecret).build();
-        }
-        if (client.equals("facebook")) {
-            return CommonOAuth2Provider.FACEBOOK.getBuilder(client)
-                    .clientId(clientId).clientSecret(clientSecret).build();
-        }
-        return null;
-    }
 }
 
 /*
@@ -317,9 +324,7 @@ public class SecurityConfig {
             Spring Boot services ← validate JWT
             Other apps       ← validate same JWT
  */
-
-
-    /*
+ /*
     OAuth 2.0 + PKCE in Spring Boot 3.5.6
     What PKCE Solves (1-minute explanation): PKCE protects the Authorization Code flow from interception attacks by adding:
         a code_verifier (secret)
@@ -411,4 +416,4 @@ public class SecurityConfig {
         ✔ Launch context handled
         ✔ Patient-scoped access    
     
-     */
+ */

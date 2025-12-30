@@ -28,7 +28,7 @@ public class LogUtil {
         for (String key : map.keySet()) {
             log.debug(" key {} value {}", key, map.get(key));
         }
-        log.debug("## End LOGGING");
+        log.debug("## End LOGGING {} ", from);
     }
 
     public static void logRequest(String from, HttpServletRequest req) {
@@ -58,7 +58,7 @@ public class LogUtil {
                 .forEachRemaining(k -> {
                     log.debug("PARAM key {}, value {}", k, req.getAttribute(k));
                 });
-        log.debug("## End LOGGING");
+        log.debug("## End LOGGING {} ", from);
     }
 
     public static void logRunnerMap(String from, MapPropertySource mapPropertySource) {
@@ -70,6 +70,6 @@ public class LogUtil {
                     log.debug("ENV key={}  value={}", k, mapPropertySource.getSource().get(k));
                 }
                 );
-        log.debug("## End LOGGING");
+        log.debug("## End LOGGING {} ", from);
     }
 }

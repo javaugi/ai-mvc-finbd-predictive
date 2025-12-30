@@ -34,7 +34,7 @@ public class DelegatingAuthorizationRequestResolver implements OAuth2Authorizati
     private OAuth2AuthorizationRequest delegate(HttpServletRequest request, String clientRegistrationId) {
         String uri = request.getRequestURI();
         log.debug("DelegatingAuthorizationRequestResolver delegate uri={}, clientRegistrationId={}", uri, clientRegistrationId);
-        if (uri.startsWith("/oauth2/authorization/epicfhir")) {
+        if (uri.contains("/oauth2/authorization/epicfhir")) {
             return (clientRegistrationId == null)
                     ? epicResolver.resolve(request)
                     : epicResolver.resolve(request, clientRegistrationId);

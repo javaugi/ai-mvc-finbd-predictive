@@ -6,7 +6,7 @@
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
         <version>3.5.8</version>
-		<relativePath/> <!-- lookup parent from repository -->
+        <relativePath/> <!-- lookup parent from repository released on Sep 18, 2025 -->
 	</parent>
     
 	<groupId>com.jvidia.aimlbdpa</groupId>
@@ -79,7 +79,8 @@
         <spring-dotenv.version>4.0.0</spring-dotenv.version>
         <bouncycastle.jdk15on.version>1.70</bouncycastle.jdk15on.version>
         <wiremock.version>4.0.0-beta.23</wiremock.version>
-        
+        <jmh.version>1.37</jmh.version>
+
     </properties> 
     
     <dependencyManagement>
@@ -203,7 +204,14 @@
                 <artifactId>bucket4j_jdk17-redis</artifactId>
                 <version>${com.bucket4j.version}</version>
                 <type>pom</type>
-            </dependency>                                                        
+            </dependency>          
+            <dependency>
+                <groupId>org.openjdk.jmh</groupId>
+                <artifactId>jmh-parent</artifactId>
+                <version>${jmh.version}</version>
+                <type>pom</type>
+            </dependency>
+                                                          
         </dependencies>
     </dependencyManagement>
         
@@ -395,7 +403,16 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
         </dependency>
-                      
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-client</artifactId>
+            <version>${spring-security-bom.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-oauth2-authorization-server</artifactId>
+        </dependency>
+                                                            
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
@@ -742,7 +759,11 @@
             <groupId>jakarta.validation</groupId>
             <artifactId>jakarta.validation-api</artifactId>
         </dependency>    
-                          
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>        
+                                  
         <dependency>
             <groupId>io.opentelemetry</groupId>
             <artifactId>opentelemetry-sdk</artifactId>      
@@ -1178,6 +1199,25 @@
             <artifactId>bucket4j_jdk17-redis-common</artifactId>
             <version>${com.bucket4j.version}</version>
         </dependency>
+        
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core</artifactId>
+            <version>${jmh.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-generator-annprocess</artifactId>
+            <version>${jmh.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.openjdk.jmh</groupId>
+            <artifactId>jmh-core-benchmarks</artifactId>
+            <version>${jmh.version}</version>
+            <scope>test</scope>
+        </dependency>        
     </dependencies>  
 
 	<build>
@@ -1306,6 +1346,11 @@
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-configuration-processor</artifactId>
                         </path>
+                        <path>
+                            <groupId>org.openjdk.jmh</groupId>
+                            <artifactId>jmh-generator-annprocess</artifactId>
+                            <version>${jmh.version}</version>
+                        </path>                                       
                     </annotationProcessorPaths>                    
 				</configuration>
             </plugin> 
@@ -1436,6 +1481,32 @@
                 </executions>                 
             </plugin> 
             
+            <!--
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.6.1</version>
+                <executions>
+                    <execution>
+                        <id>jmh-benchmark</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <finalName>benchmark</finalName>
+                            <transformers>
+                                <transformer
+                                    implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>org.openjdk.jmh.Main</mainClass>
+                                </transformer>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            -->
+                        
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>

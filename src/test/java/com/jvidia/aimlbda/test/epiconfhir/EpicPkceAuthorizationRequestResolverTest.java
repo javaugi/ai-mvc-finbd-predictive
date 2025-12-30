@@ -76,6 +76,6 @@ public class EpicPkceAuthorizationRequestResolverTest extends MyApplicationBaseT
 
         // ✅ Epic SMART on FHIR requirement
         assertThat(params.get("aud"))
-                .isEqualTo("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4/");
+                .isEqualTo("https://fhir.epic.com/interconnect-fhir-oauth/api/FHIR/R4");
     }
 }
