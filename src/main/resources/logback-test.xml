@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <property name="LOG_PATH_SETTINGS" value="${appserver.output}"/>
+    <property name="LOG_PATH_DEFAULT" value="C:/Users/javau/dev/logs"/>
+    <property name="LOG_PATH" value="${${LOG_PATH_SETTINGS}:-${LOG_PATH_DEFAULT}}" />
+    <property name="LOG_FILE_NAME" value="appaimvc" />
+    <property name="LOG_FILE_FORMAT" value="%highlight(%-25(%date) %-5level) %cyan(%logger{5}) %msg%n"/>
+        
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${LOG_FILE_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${LOG_FILE_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <append>true</append>
+        <encoder>
+            <pattern>${LOG_FILE_FORMAT}</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.jvidia.aimlbda" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.config" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.filter" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.handler" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.oauth2" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.security.oauth2.user" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    <logger name="com.jvidia.aimlbda.utils" level="INFO" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+    
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+</Configuration>
