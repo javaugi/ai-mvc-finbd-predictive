@@ -1,6 +1,6 @@
 #!/bin/sh
 reset
-mvn --version
+./mvnw --version
 echo "Running mvn spring-boot:run -Dspring-boot.run.profiles=prod"
-mvn spring-boot:run -Dspring-boot.run.profiles=prod
+./mvnw spring-boot:run -Dspring-boot.run.profiles=prod
 

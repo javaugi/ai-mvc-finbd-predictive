@@ -1,7 +1,7 @@
 #!/bin/sh
 echo "Running mvn clean package and starting the app"
-mvn --version
-mvn clean package
+./mvnw --version
+./mvnw clean package
 reset
 echo "Running mvn spring-boot:run"
-mvn spring-boot:run
+./mvnw spring-boot:run

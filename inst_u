@@ -1,0 +1,4 @@
+#!/bin/sh
+echo "Running mvn clean install"
+./mvnw --version
+./mvnw clean install -U
